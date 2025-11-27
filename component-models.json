@@ -93,6 +93,24 @@
     ]
   },
   {
+    "id": "dynamicmedia-picker",
+    "fields": [
+      {
+        "component": "custom-asset-namespace:custom-asset",
+        "name": "image",
+        "label": "Image",
+        "configUrl": "/content/dam/ref-demo-dev-dm/en/image.config.json",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageTitle",
+        "label": "Alt Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "image",
     "fields": [
       {
