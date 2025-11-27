@@ -99,7 +99,7 @@
         "component": "custom-asset-namespace:custom-asset",
         "name": "image",
         "label": "Image",
-        "configUrl": "/content/dam/ref-demo-dev-dm/en/image.config.json",
+        "configUrl": "/content/dam/refdemo-eds-dev/en/image.config.json",
         "valueType": "string"
       },
       {
