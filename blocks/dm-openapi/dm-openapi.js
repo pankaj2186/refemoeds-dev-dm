@@ -7,6 +7,16 @@ import { getDynamicMediaServerURL } from '../../scripts/utils.js';
 export default async function decorate(block) {
   console.log("dm-openapi :"+block);
 
+   const block = a.closest('[data-block-name], [data-aue-resource]');
+  let rotation = null;
+  if (block) {
+    const rotationEl = block.querySelector('[data-aue-prop="rotation"]');
+    if (rotationEl) {
+      rotation = rotationEl.textContent.trim();
+      console.log("rotation :"+rotation);
+      rotationEl.parentElement.remove(); // Remove the property div
+    }
+  }
 
 /*
 
