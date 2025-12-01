@@ -19,14 +19,14 @@ export default async function decorate(block) {
 
     let imageUrl = anchor.getAttribute('href');
     let flip = null;
-    let rotation = null;
+    let rotate = null;
     let crop = null;
     
-    const rotationEl = block.querySelector('[data-aue-prop="rotation"]');
-    if (rotationEl) {
-      rotation = rotationEl.textContent.trim();
-      console.log("rotation :"+rotation);
-      rotationEl.parentElement.remove(); // Remove the property div
+    const rotateEl = block.querySelector('[data-aue-prop="rotate"]');
+    if (rotateEl) {
+      rotate = rotateEl.textContent.trim();
+      console.log("rotate :"+rotate);
+      rotateEl.parentElement.remove(); // Remove the property div
     }
     const flipEl = block.querySelector('[data-aue-prop="flip"]');
     if (flipEl) {
@@ -50,9 +50,9 @@ export default async function decorate(block) {
         const url = new URL(imageUrl);
         const existingParams = new URLSearchParams(url.search);
         
-        // Add flip, rotation, crop if present
+        // Add flip, rotate, crop if present
         if (flip) existingParams.append('flip', flip);
-        if (rotation) existingParams.append('rotate', rotation);
+        if (rotate) existingParams.append('rotate', rotate);
         if (crop) existingParams.append('crop', crop);
         
         finalImageUrl = url.origin + url.pathname + '?' + existingParams.toString();
@@ -61,7 +61,7 @@ export default async function decorate(block) {
         const existingParams = imageUrl.includes('?') ? '&' : '?';
         const newParams = [];
         if (flip) newParams.push('flip=' + encodeURIComponent(flip));
-        if (rotation) newParams.push('rotation=' + encodeURIComponent(rotation));
+        if (rotate) newParams.push('rotate=' + encodeURIComponent(rotate));
         if (crop) newParams.push('crop=' + encodeURIComponent(crop));
         if (newParams.length > 0) {
         finalImageUrl += existingParams + newParams.join('&');
@@ -167,7 +167,7 @@ export default async function decorate(block) {
             baseUrl = imgSrc.split('?')[0];
           }
         }
-        const rotationVal = inputs[2]?.textContent?.trim();
+        const rotateVal = inputs[2]?.textContent?.trim();
         const flipVal = inputs[3]?.textContent?.trim();
         const cropVal = inputs[4]?.textContent?.trim();
         const altFromAuthor = inputs[5]?.textContent?.trim();
@@ -180,7 +180,7 @@ export default async function decorate(block) {
         const params = new URLSearchParams();
         params.set('width', '1400');
         params.set('quality', '85');
-        if (rotationVal && rotationVal.toLowerCase() !== 'none') params.set('rotate', rotationVal);
+        if (rotateVal && rotateVal.toLowerCase() !== 'none') params.set('rotate', rotateVal);
         if (flipVal) params.set('flip', flipVal.toLowerCase());
         if (cropVal) params.set('crop', cropVal.toLowerCase());
 
