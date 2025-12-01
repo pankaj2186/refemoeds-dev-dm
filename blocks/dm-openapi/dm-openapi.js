@@ -7,7 +7,7 @@ import { getDynamicMediaServerURL } from '../../scripts/utils.js';
 export default async function decorate(block) {
   console.log("dm-openapi :"+block);
 
-  block = a.closest('[data-block-name], [data-aue-resource]');
+  //block = a.closest('[data-block-name], [data-aue-resource]');
   console.log("dm-openapi :"+block);
 
   let rotation = null;
