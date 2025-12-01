@@ -93,7 +93,7 @@
     ]
   },
   {
-    "id": "dynamicmedia-picker",
+    "id": "dm-openapi",
     "fields": [
       {
         "component": "custom-asset-namespace:custom-asset",
