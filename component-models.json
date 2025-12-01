@@ -117,8 +117,8 @@
             "valueType": "string",
             "options": [
               {
-                "name": "-- Select Preset --",
-                "value": "na"
+                "name": "None",
+                "value": ""
               },
               {
                 "name": "PNG – Enhanced Clarity",
@@ -128,7 +128,7 @@
         },
         {
             "condition": {
-                "!=": [{ "var": "preset" }, "Always_Use_a_Preset"]
+                "==": [{ "var": "preset" }, ""]
             },
             "component": "select",
             "name": "rotate",
@@ -189,7 +189,7 @@
         },
         {
             "condition": {
-                "!=": [{ "var": "preset" }, "Always_Use_a_Preset"]
+                "==": [{ "var": "preset" }, ""]
             },
             "component": "select",
             "name": "flip",
@@ -218,7 +218,7 @@
         },
         {
             "condition": {
-                "!=": [{ "var": "preset" }, "Always_Use_a_Preset"]
+                "==": [{ "var": "preset" }, ""]
             },
             "component": "text",
             "name": "crop",
