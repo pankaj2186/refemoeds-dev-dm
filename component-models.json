@@ -189,7 +189,7 @@
         },
         {
             "condition": {
-                "==": [{ "var": "preset" }, ""]
+                "in": [{ "var": "preset" }, ["", null]]
             },
             "component": "select",
             "name": "flip",
