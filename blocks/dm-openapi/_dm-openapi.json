@@ -35,15 +35,15 @@
         },
         {
           "component": "select",
-          "name": "rotation",
+          "name": "rotate",
           "value": "",
-          "label": "Rotation",
+          "label": "Rotate",
           "description": "Select the rotation which will rotate the image.",
           "valueType": "string",
           "options": [
             {
-              "name": "none",
-              "value": "None"
+              "name": "None",
+              "value": ""
             },
             {
               "name": "30",
