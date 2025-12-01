@@ -5,7 +5,7 @@ import { getDynamicMediaServerURL } from '../../scripts/utils.js';
  * @param {HTMLElement} $block
  */
 export default async function decorate(block) {
-  console.log(block);
+  console.log("dm-openapi :"+block);
 
 
 /*
