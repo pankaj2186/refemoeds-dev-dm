@@ -233,10 +233,11 @@
       "id": "image",
       "fields": [
         {
-          "component": "reference",
+          "component": "custom-asset-namespace:custom-asset",
           "name": "image",
           "label": "Image",
-          "multi": false
+          "configUrl": "/content/dam/refdemo-eds-dev/en/image.config.json",
+          "valueType": "string"
         },
         {
           "component": "text",
