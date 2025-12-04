@@ -420,27 +420,31 @@ export async function decorateDMImages(main) {
                  const smallestCropName = cropOrder[0];
                  
                  // Create source sets (one for each smartcrop size)
+                 // Build parameter string for rotate, flip, and crop
+                 const advanceModifierParams = `${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`;
+                 
                  cropOrder.forEach((cropName, index) => {
                    const crop = smartcrops[cropName];
                    if (crop) {
-                     const cropUrl = `${originalUrl}${paramSeparator}smartcrop=${cropName}`;
                      const minWidth = parseInt(crop.width, 10);
+                     // Since baseUrl has no query params, always use ? for first param
+                     const smartcropParam = `?smartcrop=${cropName}`;
                      
-                     // Create source element
-                     const source = document.createElement('source');
-                     source.type = 'image/webp';
-                     source.srcset = cropUrl;
+                     // Create webp source with preferwebp=true and type attribute
+                     const sourceWebp = document.createElement('source');
+                     sourceWebp.type = 'image/webp';
+                     sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${transformParams}`;
                      // Smallest crop (first in order) has no media query (default), others use min-width based on width property
                      if (index > 0 && minWidth > 0) {
-                       source.media = `(min-width: ${minWidth}px)`;
+                       sourceWebp.media = `(min-width: ${minWidth}px)`;
                      }
-                     pic.appendChild(source);
+                     pic.appendChild(sourceWebp);
                    }
                  });
                  
                  // Use smallest crop as fallback for img element
                  const fallbackUrl = smallestCropName 
-                   ? `${originalUrl}${paramSeparator}smartcrop=${smallestCropName}${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`
+                   ? `${originalUrl}?smartcrop=${smallestCropName}&quality=85${transformParams}`
                    : a.href;
                  
                  const img = document.createElement('img');
