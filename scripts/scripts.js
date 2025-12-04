@@ -421,7 +421,7 @@ export async function decorateDMImages(main) {
                  
                  // Create source sets (one for each smartcrop size)
                  // Build parameter string for rotate, flip, and crop
-                 const advanceModifierParams = `${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`;
+                 const advanceModifierParams = `${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}${preset ? '&preset=' + preset : ''}`;
                  
                  cropOrder.forEach((cropName, index) => {
                    const crop = smartcrops[cropName];
@@ -443,7 +443,7 @@ export async function decorateDMImages(main) {
                  });
                  
                  // Use smallest crop as fallback for img element
-                 const fallbackUrl = `${originalUrl}`;
+                 const fallbackUrl = `${originalUrl}${advanceModifierParams}`;
                  
                  const img = document.createElement('img');
                  img.loading = 'lazy';
