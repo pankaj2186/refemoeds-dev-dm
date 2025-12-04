@@ -383,77 +383,79 @@ export async function decorateDMImages(main) {
                console.log("preset :"+preset);
                presetEl.parentElement.remove(); 
              }
-         }
-         let metadataUrl = getMetadataUrl(a.href);
+
+              let metadataUrl = getMetadataUrl(a.href);
            
-        if (metadataUrl) {
-             try {
-               const response = await fetch(metadataUrl);
-               if (!response.ok) {
-                 console.error(`Failed to fetch metadata: ${response.status}`);
-                 continue;
-               }
-               
-               const metadata = await response.json();
-               const smartcrops = metadata?.repositoryMetadata?.smartcrops;
-               
-               if (smartcrops) {
-                 const pic = document.createElement('picture');
-                 
-                 // Get base URL with extension
-                 const baseUrl = a.href.split('?')[0];
-                 
-                 // Dynamically determine crop order from JSON (smallest to largest width)
-                 const cropOrder = Object.keys(smartcrops).sort((a, b) => {
-                   const widthA = parseInt(smartcrops[a].width, 10);
-                   const widthB = parseInt(smartcrops[b].width, 10);
-                   return widthA - widthB;
-                 });
-                 
-                 // Get the smallest crop for fallback
-                 const smallestCropName = cropOrder[0];
-                 
-                 // Create source sets (one for each smartcrop size)
-                 cropOrder.forEach((cropName, index) => {
-                   const crop = smartcrops[cropName];
-                   if (crop) {
-                     const cropUrl = `${baseUrl}?smartcrop=${cropName.toLowerCase()}`;
-                     const minWidth = parseInt(crop.width, 10);
-                     
-                     // Create source element
-                     const source = document.createElement('source');
-                     source.type = 'image/webp';
-                     source.srcset = cropUrl;
-                     // Smallest crop (first in order) has no media query (default), others use min-width based on width property
-                     if (index > 0 && minWidth > 0) {
-                       source.media = `(min-width: ${minWidth}px)`;
-                     }
-                     pic.appendChild(source);
-                   }
-                 });
-                 
-                 // Use smallest crop as fallback for img element
-                 const fallbackUrl = smallestCropName 
-                   ? `${baseUrl}?smartcrop=${smallestCropName.toLowerCase()}`
-                   : a.href;
-                 
-                 const img = document.createElement('img');
-                 img.loading = 'lazy';
-                 img.src = fallbackUrl;
-                 
-                 if (a.href !== a.title) {
-                   img.setAttribute('alt', a.title || '');
-                 } else {
-                   img.setAttribute('alt', '');
-                 }
-                 
-                 pic.appendChild(img);
-                 a.replaceWith(pic);
-               }
-             } catch (error) {
-               console.error('Error fetching or processing metadata:', error);
-             }
-        }
+              if (metadataUrl) {
+                  try {
+                    const response = await fetch(metadataUrl);
+                    if (!response.ok) {
+                      console.error(`Failed to fetch metadata: ${response.status}`);
+                      continue;
+                    }
+                    
+                    const metadata = await response.json();
+                    const smartcrops = metadata?.repositoryMetadata?.smartcrops;
+                    
+                    if (smartcrops) {
+                      const pic = document.createElement('picture');
+                      
+                      // Get base URL with extension
+                      const baseUrl = a.href.split('?')[0];
+                      
+                      // Dynamically determine crop order from JSON (smallest to largest width)
+                      const cropOrder = Object.keys(smartcrops).sort((a, b) => {
+                        const widthA = parseInt(smartcrops[a].width, 10);
+                        const widthB = parseInt(smartcrops[b].width, 10);
+                        return widthA - widthB;
+                      });
+                      
+                      // Get the smallest crop for fallback
+                      const smallestCropName = cropOrder[0];
+                      
+                      // Create source sets (one for each smartcrop size)
+                      cropOrder.forEach((cropName, index) => {
+                        const crop = smartcrops[cropName];
+                        if (crop) {
+                          const cropUrl = `${baseUrl}?smartcrop=${cropName.toLowerCase()}`;
+                          const minWidth = parseInt(crop.width, 10);
+                          
+                          // Create source element
+                          const source = document.createElement('source');
+                          source.type = 'image/webp';
+                          source.srcset = cropUrl;
+                          // Smallest crop (first in order) has no media query (default), others use min-width based on width property
+                          if (index > 0 && minWidth > 0) {
+                            source.media = `(min-width: ${minWidth}px)`;
+                          }
+                          pic.appendChild(source);
+                        }
+                      });
+                      
+                      // Use smallest crop as fallback for img element
+                      const fallbackUrl = smallestCropName 
+                        ? `${baseUrl}?smartcrop=${smallestCropName.toLowerCase()}`
+                        : a.href;
+                      
+                      const img = document.createElement('img');
+                      img.loading = 'lazy';
+                      img.src = fallbackUrl;
+                      
+                      if (a.href !== a.title) {
+                        img.setAttribute('alt', a.title || '');
+                      } else {
+                        img.setAttribute('alt', '');
+                      }
+                      
+                      pic.appendChild(img);
+                      a.replaceWith(pic);
+                    }
+                  } catch (error) {
+                    console.error('Error fetching or processing metadata:', error);
+                  }
+              }
+         }
+        
  
          /*
          const url = new URL(a.href);
