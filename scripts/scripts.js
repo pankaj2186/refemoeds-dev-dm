@@ -415,7 +415,6 @@ export async function decorateDMImages(main) {
                      '.jpeg': 'image/jpeg',
                      '.png': 'image/png',
                      '.avif': 'image/avif',
-                     '.gif': 'image/gif',
                      '.svg': 'image/svg+xml'
                    };
                    return typeMap[extension] || 'image/webp'; // Default to webp if unknown
