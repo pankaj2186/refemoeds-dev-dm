@@ -433,7 +433,7 @@ export async function decorateDMImages(main) {
                      // Create webp source with preferwebp=true and type attribute
                      const sourceWebp = document.createElement('source');
                      sourceWebp.type = 'image/webp';
-                     sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${transformParams}`;
+                     sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
                      // Smallest crop (first in order) has no media query (default), others use min-width based on width property
                      if (index > 0 && minWidth > 0) {
                        sourceWebp.media = `(min-width: ${minWidth}px)`;
@@ -444,7 +444,7 @@ export async function decorateDMImages(main) {
                  
                  // Use smallest crop as fallback for img element
                  const fallbackUrl = smallestCropName 
-                   ? `${originalUrl}?smartcrop=${smallestCropName}&quality=85${transformParams}`
+                   ? `${originalUrl}?smartcrop=${smallestCropName}&quality=85${advanceModifierParams}`
                    : a.href;
                  
                  const img = document.createElement('img');
