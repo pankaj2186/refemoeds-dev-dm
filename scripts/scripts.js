@@ -309,97 +309,98 @@ async function loadLazy(doc) {
  * @param {HTMLElement} main - The main container element that includes the links to be processed.
  */
 export function decorateDMImages(main) {
- main.querySelectorAll('a[href]').forEach((a) => {
-    if (isDMOpenAPIUrl(a.href)) {
-      const isGifFile = a.href.toLowerCase().endsWith('.gif');
-      const containsOriginal = a.href.includes('/original/');
-
-      if (!containsOriginal || isGifFile) {
-        const blockBeingDecorated = whatBlockIsThis(a);
-        let blockName = '';
-        let rotate = '';
-        let flip = '';
-        let crop = '';
-        let preset = '';
-
-        if(blockBeingDecorated){
-            blockName = Array.from(blockBeingDecorated.classList).find(className => className !== 'block');
-        }
-        const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.ogg', '.m4v', '.mkv'];
-        const isVideoAsset = videoExtensions.some(ext => url.href.toLowerCase().includes(ext));
-        if (isVideoAsset || blockName === 'video') return;
-        if(blockName && (blockName === 'dynamicmedia-image' || blockName === 'dm-openapi')){
-            const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
-            if (rotateEl) {
-              rotate = rotateEl.textContent.trim();
-              console.log("rotate :"+rotate);
-              rotateEl.parentElement.remove(); // Remove the property div
-            }
-            const flipEl = blockBeingDecorated.querySelector('[data-aue-prop="flip"]');
-            if (flipEl) {
-              flip = flipEl.textContent.trim();
-              console.log("flip :"+flip);
-              flipEl.parentElement.remove(); 
-            }
-            const cropEl = blockBeingDecorated.querySelector('[data-aue-prop="crop"]');
-            if (cropEl) {
-              crop = cropEl.textContent.trim();
-              console.log("crop :"+crop);
-              cropEl.parentElement.remove(); 
-            }
-            const presetEl = blockBeingDecorated.querySelector('[data-aue-prop="preset"]');
-            if (presetEl) {
-              preset = presetEl.textContent.trim();
-              console.log("preset :"+preset);
-              presetEl.parentElement.remove(); 
-            }
-        }
-
-
-        /*
-        const url = new URL(a.href);
-        if (url.hostname.endsWith('.adobeaemcloud.com')) {
-          const pictureEl = picture(
-          source({ 
-              srcset: `${hrefWOExtn}.webp?width=1400&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              type: 'image/webp', 
-              media: '(min-width: 992px)' 
-          }),
-          source({ 
-              srcset: `${hrefWOExtn}.webp?width=1320&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              type: 'image/webp', 
-              media: '(min-width: 768px)' 
-          }),
-          source({ 
-              srcset: `${hrefWOExtn}.webp?width=780&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              type: 'image/webp', 
-              media: '(min-width: 320px)' 
-          }),
-          source({ 
-              srcset: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              media: '(min-width: 992px)' 
-          }),
-          source({ 
-              srcset: `${hrefWOExtn}.webp?width=1320&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              media: '(min-width: 768px)' 
-          }),
-          source({ 
-              srcset: `${hrefWOExtn}.webp?width=780&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              media: '(min-width: 320px)' 
-          }),
-          img({ 
-              src: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              alt: a.innerText,
-              loading:'lazy'
-          }),
-        );
-        
-        
-        a.replaceWith(pictureEl);
-        }
-        */
-      }
-  });
+  main.querySelectorAll('a[href]').forEach((a) => {
+     if (isDMOpenAPIUrl(a.href)) {
+       const isGifFile = a.href.toLowerCase().endsWith('.gif');
+       const containsOriginal = a.href.includes('/original/');
+ 
+       if (!containsOriginal || isGifFile) {
+         const blockBeingDecorated = whatBlockIsThis(a);
+         let blockName = '';
+         let rotate = '';
+         let flip = '';
+         let crop = '';
+         let preset = '';
+ 
+         if(blockBeingDecorated){
+             blockName = Array.from(blockBeingDecorated.classList).find(className => className !== 'block');
+         }
+         const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.ogg', '.m4v', '.mkv'];
+         const isVideoAsset = videoExtensions.some(ext => a.href.toLowerCase().includes(ext));
+         if (isVideoAsset || blockName === 'video') return;
+         if(blockName && (blockName === 'dynamicmedia-image' || blockName === 'dm-openapi')){
+             const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
+             if (rotateEl) {
+               rotate = rotateEl.textContent.trim();
+               console.log("rotate :"+rotate);
+               rotateEl.parentElement.remove(); // Remove the property div
+             }
+             const flipEl = blockBeingDecorated.querySelector('[data-aue-prop="flip"]');
+             if (flipEl) {
+               flip = flipEl.textContent.trim();
+               console.log("flip :"+flip);
+               flipEl.parentElement.remove(); 
+             }
+             const cropEl = blockBeingDecorated.querySelector('[data-aue-prop="crop"]');
+             if (cropEl) {
+               crop = cropEl.textContent.trim();
+               console.log("crop :"+crop);
+               cropEl.parentElement.remove(); 
+             }
+             const presetEl = blockBeingDecorated.querySelector('[data-aue-prop="preset"]');
+             if (presetEl) {
+               preset = presetEl.textContent.trim();
+               console.log("preset :"+preset);
+               presetEl.parentElement.remove(); 
+             }
+         }
+ 
+ 
+         /*
+         const url = new URL(a.href);
+         if (url.hostname.endsWith('.adobeaemcloud.com')) {
+           const pictureEl = picture(
+           source({ 
+               srcset: `${hrefWOExtn}.webp?width=1400&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               type: 'image/webp', 
+               media: '(min-width: 992px)' 
+           }),
+           source({ 
+               srcset: `${hrefWOExtn}.webp?width=1320&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               type: 'image/webp', 
+               media: '(min-width: 768px)' 
+           }),
+           source({ 
+               srcset: `${hrefWOExtn}.webp?width=780&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               type: 'image/webp', 
+               media: '(min-width: 320px)' 
+           }),
+           source({ 
+               srcset: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               media: '(min-width: 992px)' 
+           }),
+           source({ 
+               srcset: `${hrefWOExtn}.webp?width=1320&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               media: '(min-width: 768px)' 
+           }),
+           source({ 
+               srcset: `${hrefWOExtn}.webp?width=780&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               media: '(min-width: 320px)' 
+           }),
+           img({ 
+               src: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
+               alt: a.innerText,
+               loading:'lazy'
+           }),
+         );
+         
+         
+         a.replaceWith(pictureEl);
+         }
+         */
+       }
+     }
+   });
 }
 
 function whatBlockIsThis(element) {
