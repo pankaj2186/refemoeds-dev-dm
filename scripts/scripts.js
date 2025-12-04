@@ -405,32 +405,16 @@ export async function decorateDMImages(main) {
                  // Get base URL with extension
                  const baseUrl = a.href.split('?')[0];
                  
-                 // Get MIME type from URL extension
-                 const getImageType = (url) => {
-                   const pathname = url.pathname.toLowerCase();
-                   const extension = pathname.substring(pathname.lastIndexOf('.'));
-                   const typeMap = {
-                     '.webp': 'image/webp',
-                     '.jpg': 'image/jpeg',
-                     '.jpeg': 'image/jpeg',
-                     '.png': 'image/png',
-                     '.avif': 'image/avif',
-                     '.svg': 'image/svg+xml'
-                   };
-                   return typeMap[extension] || 'image/webp'; // Default to webp if unknown
-                 };
-                 
-                 const imageType = getImageType(originalUrl);
-                 
                  // Check if original URL has query parameters to determine separator
                  const hasQueryParams = originalUrl?.toString().includes('?');
                  const paramSeparator = hasQueryParams ? '&' : '?';
                  
-                 // Dynamically determine crop order from JSON (smallest to largest width)
+                  
+                 // Dynamically determine crop order from JSON (largest to smallest width)
                  const cropOrder = Object.keys(smartcrops).sort((a, b) => {
                    const widthA = parseInt(smartcrops[a].width, 10);
                    const widthB = parseInt(smartcrops[b].width, 10);
-                   return widthA - widthB;
+                   return widthB - widthA;
                  });
                  
                  // Get the smallest crop for fallback
