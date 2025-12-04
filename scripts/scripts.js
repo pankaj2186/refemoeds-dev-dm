@@ -428,7 +428,7 @@ export async function decorateDMImages(main) {
                    if (crop) {
                      const minWidth = parseInt(crop.width, 10);
                      // Since baseUrl has no query params, always use ? for first param
-                     const smartcropParam = `?smartcrop=${cropName}`;
+                     const smartcropParam = `${paramSeparator}smartcrop=${cropName}`;
                      
                      // Create webp source with preferwebp=true and type attribute
                      const sourceWebp = document.createElement('source');
@@ -443,7 +443,7 @@ export async function decorateDMImages(main) {
                  });
                  
                  // Use smallest crop as fallback for img element
-                 const fallbackUrl = `${originalUrl}${advanceModifierParams}`;
+                 const fallbackUrl = `${originalUrl}${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
                  
                  const img = document.createElement('img');
                  img.loading = 'lazy';
