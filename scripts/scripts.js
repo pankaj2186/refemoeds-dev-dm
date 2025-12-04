@@ -302,6 +302,10 @@ async function loadLazy(doc) {
   loadFonts();
 }
 
+function isDMOpenAPIUrl(src) {
+  return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
+}
+
 /**
  * Decorates Dynamic Media images by modifying their URLs to include specific parameters
  * and creating a <picture> element with different sources for different image formats and sizes.
