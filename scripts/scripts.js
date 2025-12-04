@@ -329,7 +329,7 @@ export function decorateDMImages(main) {
          if(blockBeingDecorated){
              blockName = Array.from(blockBeingDecorated.classList).find(className => className !== 'block');
          }
-         const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.ogg', '.m4v', '.mkv'];
+         const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
          const isVideoAsset = videoExtensions.some(ext => a.href.toLowerCase().includes(ext));
          if (isVideoAsset || blockName === 'video') return;
          if(blockName && (blockName === 'dynamicmedia-image' || blockName === 'dm-openapi')){
