@@ -443,9 +443,7 @@ export async function decorateDMImages(main) {
                  });
                  
                  // Use smallest crop as fallback for img element
-                 const fallbackUrl = smallestCropName 
-                   ? `${originalUrl}?smartcrop=${smallestCropName}&quality=85${advanceModifierParams}`
-                   : a.href;
+                 const fallbackUrl = `${originalUrl}`;
                  
                  const img = document.createElement('img');
                  img.loading = 'lazy';
