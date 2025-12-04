@@ -181,7 +181,7 @@ function decorateButtons(main) {
  * @param {Element} main The main element
  */
 // eslint-disable-next-line import/prefer-default-export
-export function decorateMain(main) {
+export async function decorateMain(main) {
   // hopefully forward compatible button decoration
   decorateButtons(main);
   decorateIcons(main);
@@ -224,7 +224,7 @@ async function loadEager(doc) {
   renderWBDataLayer();
   const main = doc.querySelector('main');
   if (main) {
-    decorateMain(main);
+    await decorateMain(main);
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
@@ -306,14 +306,39 @@ function isDMOpenAPIUrl(src) {
   return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
 }
 
+export function getMetadataUrl(url) {
+  try {
+    // Pattern to match: /adobe/assets/urn:aaid:aem:[uuid]
+    // UUID format: 8-4-4-4-12 hexadecimal characters
+    const urnPattern = /(\/adobe\/assets\/urn:aaid:aem:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
+    const match = url.match(urnPattern);
+    
+    if (!match) {
+      return null;
+    }
+    
+    // Extract the base URL (protocol + hostname)
+    const urlObj = new URL(url);
+    const baseUrl = `${urlObj.protocol}//${urlObj.hostname}`;
+    
+    // Construct the metadata URL
+    return `${baseUrl}${match[1]}/metadata`;
+  } catch (error) {
+    console.error('Error creating metadata URL:', error);
+    return null;
+  }
+}
+
 /**
  * Decorates Dynamic Media images by modifying their URLs to include specific parameters
  * and creating a <picture> element with different sources for different image formats and sizes.
  *
  * @param {HTMLElement} main - The main container element that includes the links to be processed.
  */
-export function decorateDMImages(main) {
-  main.querySelectorAll('a[href]').forEach((a) => {
+export async function decorateDMImages(main) {
+  const links = Array.from(main.querySelectorAll('a[href]'));
+  
+  for (const a of links) {
      if (isDMOpenAPIUrl(a.href)) {
        const isGifFile = a.href.toLowerCase().endsWith('.gif');
        const containsOriginal = a.href.includes('/original/');
@@ -331,34 +356,8 @@ export function decorateDMImages(main) {
          }
          const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
          const isVideoAsset = videoExtensions.some(ext => a.href.toLowerCase().includes(ext));
-         if (isVideoAsset || blockName === 'video') return;
-         /*
-         if(blockName && blockName === 'dynamicmedia-image'){
-             const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
-             if (rotateEl) {
-               rotate = rotateEl.textContent.trim();
-               console.log("rotate :"+rotate);
-               rotateEl.parentElement.remove(); // Remove the property div
-             }
-             const flipEl = blockBeingDecorated.querySelector('[data-aue-prop="flip"]');
-             if (flipEl) {
-               flip = flipEl.textContent.trim();
-               console.log("flip :"+flip);
-               flipEl.parentElement.remove(); 
-             }
-             const cropEl = blockBeingDecorated.querySelector('[data-aue-prop="crop"]');
-             if (cropEl) {
-               crop = cropEl.textContent.trim();
-               console.log("crop :"+crop);
-               cropEl.parentElement.remove(); 
-             }
-             const presetEl = blockBeingDecorated.querySelector('[data-aue-prop="preset"]');
-             if (presetEl) {
-               preset = presetEl.textContent.trim();
-               console.log("preset :"+preset);
-               presetEl.parentElement.remove(); 
-             }
-         }*/
+         if (isVideoAsset || blockName === 'video') continue;
+         
          if(blockName && blockName === 'dm-openapi'){
              const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
              if (rotateEl) {
@@ -385,7 +384,76 @@ export function decorateDMImages(main) {
                presetEl.parentElement.remove(); 
              }
          }
- 
+         let metadataUrl = getMetadataUrl(a.href);
+           
+        if (metadataUrl) {
+             try {
+               const response = await fetch(metadataUrl);
+               if (!response.ok) {
+                 console.error(`Failed to fetch metadata: ${response.status}`);
+                 continue;
+               }
+               
+               const metadata = await response.json();
+               const smartcrops = metadata?.repositoryMetadata?.smartcrops;
+               
+               if (smartcrops) {
+                 const pic = document.createElement('picture');
+                 
+                 // Get base URL with extension
+                 const baseUrl = a.href.split('?')[0];
+                 
+                 // Dynamically determine crop order from JSON (smallest to largest width)
+                 const cropOrder = Object.keys(smartcrops).sort((a, b) => {
+                   const widthA = parseInt(smartcrops[a].width, 10);
+                   const widthB = parseInt(smartcrops[b].width, 10);
+                   return widthA - widthB;
+                 });
+                 
+                 // Get the smallest crop for fallback
+                 const smallestCropName = cropOrder[0];
+                 
+                 // Create source sets (one for each smartcrop size)
+                 cropOrder.forEach((cropName, index) => {
+                   const crop = smartcrops[cropName];
+                   if (crop) {
+                     const cropUrl = `${baseUrl}?smartcrop=${cropName.toLowerCase()}`;
+                     const minWidth = parseInt(crop.width, 10);
+                     
+                     // Create source element
+                     const source = document.createElement('source');
+                     source.type = 'image/webp';
+                     source.srcset = cropUrl;
+                     // Smallest crop (first in order) has no media query (default), others use min-width based on width property
+                     if (index > 0 && minWidth > 0) {
+                       source.media = `(min-width: ${minWidth}px)`;
+                     }
+                     pic.appendChild(source);
+                   }
+                 });
+                 
+                 // Use smallest crop as fallback for img element
+                 const fallbackUrl = smallestCropName 
+                   ? `${baseUrl}?smartcrop=${smallestCropName.toLowerCase()}`
+                   : a.href;
+                 
+                 const img = document.createElement('img');
+                 img.loading = 'lazy';
+                 img.src = fallbackUrl;
+                 
+                 if (a.href !== a.title) {
+                   img.setAttribute('alt', a.title || '');
+                 } else {
+                   img.setAttribute('alt', '');
+                 }
+                 
+                 pic.appendChild(img);
+                 a.replaceWith(pic);
+               }
+             } catch (error) {
+               console.error('Error fetching or processing metadata:', error);
+             }
+        }
  
          /*
          const url = new URL(a.href);
@@ -431,8 +499,8 @@ export function decorateDMImages(main) {
          */
        }
      }
-   });
-}
+   }
+ }
 
 function whatBlockIsThis(element) {
   let currentElement = element;
