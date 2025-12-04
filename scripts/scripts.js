@@ -302,7 +302,6 @@ async function loadLazy(doc) {
   loadFonts();
 }
 
-
 /**
  * Decorates Dynamic Media images by modifying their URLs to include specific parameters
  * and creating a <picture> element with different sources for different image formats and sizes.
@@ -310,37 +309,57 @@ async function loadLazy(doc) {
  * @param {HTMLElement} main - The main container element that includes the links to be processed.
  */
 export function decorateDMImages(main) {
-  main.querySelectorAll('a[href^="https://delivery-p"]').forEach((a) => {
-    const url = new URL(a.href.split('?')[0]);
-    if (url.hostname.endsWith('.adobeaemcloud.com')) {
+ main.querySelectorAll('a[href]').forEach((a) => {
+    if (isDMOpenAPIUrl(a.href)) {
+      const isGifFile = a.href.toLowerCase().endsWith('.gif');
+      const containsOriginal = a.href.includes('/original/');
 
+      if (!containsOriginal || isGifFile) {
         const blockBeingDecorated = whatBlockIsThis(a);
         let blockName = '';
         let rotate = '';
         let flip = '';
         let crop = '';
+        let preset = '';
+
         if(blockBeingDecorated){
             blockName = Array.from(blockBeingDecorated.classList).find(className => className !== 'block');
         }
-       const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.ogg', '.m4v', '.mkv'];
-       const isVideoAsset = videoExtensions.some(ext => url.href.toLowerCase().includes(ext));
-       if (isVideoAsset || blockName === 'video') return;
-        if(blockName && blockName === 'dynamicmedia-image'){
-          rotate = blockBeingDecorated?.children[3]?.textContent?.trim();
-          flip = blockBeingDecorated?.children[4]?.textContent?.trim();
-          crop = blockBeingDecorated?.children[5]?.textContent?.trim();
+        const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.ogg', '.m4v', '.mkv'];
+        const isVideoAsset = videoExtensions.some(ext => url.href.toLowerCase().includes(ext));
+        if (isVideoAsset || blockName === 'video') return;
+        if(blockName && (blockName === 'dynamicmedia-image' || blockName === 'dm-openapi')){
+            const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
+            if (rotateEl) {
+              rotate = rotateEl.textContent.trim();
+              console.log("rotate :"+rotate);
+              rotateEl.parentElement.remove(); // Remove the property div
+            }
+            const flipEl = blockBeingDecorated.querySelector('[data-aue-prop="flip"]');
+            if (flipEl) {
+              flip = flipEl.textContent.trim();
+              console.log("flip :"+flip);
+              flipEl.parentElement.remove(); 
+            }
+            const cropEl = blockBeingDecorated.querySelector('[data-aue-prop="crop"]');
+            if (cropEl) {
+              crop = cropEl.textContent.trim();
+              console.log("crop :"+crop);
+              cropEl.parentElement.remove(); 
+            }
+            const presetEl = blockBeingDecorated.querySelector('[data-aue-prop="preset"]');
+            if (presetEl) {
+              preset = presetEl.textContent.trim();
+              console.log("preset :"+preset);
+              presetEl.parentElement.remove(); 
+            }
         }
 
-        const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
-        const match = url.href?.match(uuidPattern);
-        let aliasname = '';
-        if (!match) {
-            throw new Error('No asset UUID found in URL');
-        }else{
-          aliasname = match[1];
-        }
-        let hrefWOExtn =  url.href?.substring(0, url.href?.lastIndexOf('.'))?.replace(/\/original\/(?=as\/)/, '/');
-        const pictureEl = picture(
+
+        /*
+        const url = new URL(a.href);
+        if (url.hostname.endsWith('.adobeaemcloud.com')) {
+          const pictureEl = picture(
           source({ 
               srcset: `${hrefWOExtn}.webp?width=1400&quality=85&preferwebp=true${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
               type: 'image/webp', 
@@ -370,11 +389,16 @@ export function decorateDMImages(main) {
           }),
           img({ 
               src: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`, 
-              alt: a.innerText 
+              alt: a.innerText,
+              loading:'lazy'
           }),
         );
-      a.replaceWith(pictureEl);
-    }
+        
+        
+        a.replaceWith(pictureEl);
+        }
+        */
+      }
   });
 }
 
