@@ -423,7 +423,7 @@ export async function decorateDMImages(main) {
                  cropOrder.forEach((cropName, index) => {
                    const crop = smartcrops[cropName];
                    if (crop) {
-                     const cropUrl = `${originalUrl}${paramSeparator}smartcrop=${cropName.toLowerCase()}`;
+                     const cropUrl = `${originalUrl}${paramSeparator}smartcrop=${cropName}`;
                      const minWidth = parseInt(crop.width, 10);
                      
                      // Create source element
@@ -440,7 +440,7 @@ export async function decorateDMImages(main) {
                  
                  // Use smallest crop as fallback for img element
                  const fallbackUrl = smallestCropName 
-                   ? `${originalUrl}${paramSeparator}smartcrop=${smallestCropName.toLowerCase()}${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`
+                   ? `${originalUrl}${paramSeparator}smartcrop=${smallestCropName}${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`
                    : a.href;
                  
                  const img = document.createElement('img');
