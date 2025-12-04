@@ -405,6 +405,24 @@ export async function decorateDMImages(main) {
                  // Get base URL with extension
                  const baseUrl = a.href.split('?')[0];
                  
+                 // Get MIME type from URL extension
+                 const getImageType = (url) => {
+                   const pathname = url.pathname.toLowerCase();
+                   const extension = pathname.substring(pathname.lastIndexOf('.'));
+                   const typeMap = {
+                     '.webp': 'image/webp',
+                     '.jpg': 'image/jpeg',
+                     '.jpeg': 'image/jpeg',
+                     '.png': 'image/png',
+                     '.avif': 'image/avif',
+                     '.gif': 'image/gif',
+                     '.svg': 'image/svg+xml'
+                   };
+                   return typeMap[extension] || 'image/webp'; // Default to webp if unknown
+                 };
+                 
+                 const imageType = getImageType(originalUrl);
+                 
                  // Check if original URL has query parameters to determine separator
                  const hasQueryParams = originalUrl?.toString().includes('?');
                  const paramSeparator = hasQueryParams ? '&' : '?';
@@ -430,9 +448,9 @@ export async function decorateDMImages(main) {
                      // Since baseUrl has no query params, always use ? for first param
                      const smartcropParam = `${paramSeparator}smartcrop=${cropName}`;
                      
-                     // Create webp source with preferwebp=true and type attribute
+                     // Create source with type attribute based on URL extension
                      const sourceWebp = document.createElement('source');
-                     sourceWebp.type = 'image/webp';
+                     sourceWebp.type = imageType;
                      sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
                      // Smallest crop (first in order) has no media query (default), others use min-width based on width property
                      if (index > 0 && minWidth > 0) {
