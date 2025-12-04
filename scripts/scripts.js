@@ -332,7 +332,34 @@ export function decorateDMImages(main) {
          const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
          const isVideoAsset = videoExtensions.some(ext => a.href.toLowerCase().includes(ext));
          if (isVideoAsset || blockName === 'video') return;
-         if(blockName && (blockName === 'dynamicmedia-image' || blockName === 'dm-openapi')){
+         /*
+         if(blockName && blockName === 'dynamicmedia-image'){
+             const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
+             if (rotateEl) {
+               rotate = rotateEl.textContent.trim();
+               console.log("rotate :"+rotate);
+               rotateEl.parentElement.remove(); // Remove the property div
+             }
+             const flipEl = blockBeingDecorated.querySelector('[data-aue-prop="flip"]');
+             if (flipEl) {
+               flip = flipEl.textContent.trim();
+               console.log("flip :"+flip);
+               flipEl.parentElement.remove(); 
+             }
+             const cropEl = blockBeingDecorated.querySelector('[data-aue-prop="crop"]');
+             if (cropEl) {
+               crop = cropEl.textContent.trim();
+               console.log("crop :"+crop);
+               cropEl.parentElement.remove(); 
+             }
+             const presetEl = blockBeingDecorated.querySelector('[data-aue-prop="preset"]');
+             if (presetEl) {
+               preset = presetEl.textContent.trim();
+               console.log("preset :"+preset);
+               presetEl.parentElement.remove(); 
+             }
+         }*/
+         if(blockName && blockName === 'dm-openapi'){
              const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
              if (rotateEl) {
                rotate = rotateEl.textContent.trim();
