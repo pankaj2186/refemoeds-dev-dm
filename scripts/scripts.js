@@ -340,6 +340,8 @@ export async function decorateDMImages(main) {
   
   for (const a of links) {
      if (isDMOpenAPIUrl(a.href)) {
+
+      // add code to read the toggle flag
        const isGifFile = a.href.toLowerCase().endsWith('.gif');
        const containsOriginal = a.href.includes('/original/');
  
@@ -404,7 +406,7 @@ export async function decorateDMImages(main) {
                  const baseUrl = a.href.split('?')[0];
                  
                  // Check if original URL has query parameters to determine separator
-                 const hasQueryParams = originalUrl.includes('?');
+                 const hasQueryParams = originalUrl?.toString().includes('?');
                  const paramSeparator = hasQueryParams ? '&' : '?';
                  
                  // Dynamically determine crop order from JSON (smallest to largest width)
@@ -438,7 +440,7 @@ export async function decorateDMImages(main) {
                  
                  // Use smallest crop as fallback for img element
                  const fallbackUrl = smallestCropName 
-                   ? `${originalUrl}${paramSeparator}smartcrop=${smallestCropName.toLowerCase()}`
+                   ? `${originalUrl}${paramSeparator}smartcrop=${smallestCropName.toLowerCase()}${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}`
                    : a.href;
                  
                  const img = document.createElement('img');
