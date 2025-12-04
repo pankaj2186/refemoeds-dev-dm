@@ -449,7 +449,7 @@ export async function decorateDMImages(main) {
                      
                      // Create source with type attribute based on URL extension
                      const sourceWebp = document.createElement('source');
-                     sourceWebp.type = imageType;
+                     sourceWebp.type = "image/webp";
                      sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
                      // Smallest crop (first in order) has no media query (default), others use min-width based on width property
                      if (index > 0 && minWidth > 0) {
