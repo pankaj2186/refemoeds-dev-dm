@@ -344,7 +344,8 @@ export async function decorateDMImages(main) {
       // add code to read the toggle flag
        const isGifFile = a.href.toLowerCase().endsWith('.gif');
        const containsOriginal = a.href.includes('/original/');
- 
+       const dmOpenApiDiv = a.closest('.dm-openapi');
+
        if (!containsOriginal || isGifFile) {
          const blockBeingDecorated = whatBlockIsThis(a);
          let blockName = '';
@@ -385,6 +386,12 @@ export async function decorateDMImages(main) {
                console.log("preset :"+preset);
                presetEl.parentElement.remove(); 
              }
+
+             if (dmOpenApiDiv) {
+              // Remove all immediate (direct) child divs only
+              const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
+              directChildDivs.forEach(div => div.remove());
+            }
          }
          let metadataUrl = getMetadataUrl(a.href);
            
@@ -472,7 +479,10 @@ export async function decorateDMImages(main) {
                  }
                  
                  pic.appendChild(img);
-                 a.replaceWith(pic);
+
+                dmOpenApiDiv.appendChild(pic);
+
+                //a.replaceWith(pic);
                }
              } catch (error) {
                console.error('Error fetching or processing metadata:', error);
