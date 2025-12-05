@@ -362,6 +362,48 @@ export async function decorateDMImages(main) {
          if (isVideoAsset || blockName === 'video') continue;
          
          if(blockName && blockName === 'dm-openapi'){
+
+          const parentDiv = a.closest('div');
+          if (parentDiv && parentDiv.parentElement) {
+
+            const presetDiv = parentDiv.parentElement.nextElementSibling;
+            if (presetDiv) {
+              if (presetDiv && presetDiv.textContent.trim()) {
+                preset = presetDiv.textContent.trim();
+                // Remove the rotation div from markup
+                presetDiv.remove();
+              }
+            }
+
+            const rotateDiv = parentDiv.parentElement.nextElementSibling;
+            if (rotateDiv) {
+              if (rotateDiv && rotateDiv.textContent.trim()) {
+                rotate = rotateDiv.textContent.trim();
+                // Remove the rotation div from markup
+                rotateDiv.remove();
+              }
+            }
+
+            const flipDiv = parentDiv.parentElement.nextElementSibling;
+            if (flipDiv) {
+              if (flipDiv && flipDiv.textContent.trim()) {
+                flip = flipDiv.textContent.trim();
+                // Remove the rotation div from markup
+                flipDiv.remove();
+              }
+            }
+
+            const cropDiv = parentDiv.parentElement.nextElementSibling;
+            if (cropDiv) {
+              if (cropDiv && cropDiv.textContent.trim()) {
+                crop = cropDiv.textContent.trim();
+                // Remove the rotation div from markup
+                cropDiv.remove();
+              }
+            }
+          }
+
+            /*
              const rotateEl = blockBeingDecorated.querySelector('[data-aue-prop="rotate"]');
              if (rotateEl) {
                rotate = rotateEl.textContent.trim();
@@ -386,12 +428,13 @@ export async function decorateDMImages(main) {
                console.log("preset :"+preset);
                presetEl.parentElement.remove(); 
              }
-
+             
              if (dmOpenApiDiv) {
               // Remove all immediate (direct) child divs only
               const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
               directChildDivs.forEach(div => div.remove());
             }
+              */
          }
          let metadataUrl = getMetadataUrl(a.href);
            
