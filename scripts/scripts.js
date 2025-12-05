@@ -417,13 +417,28 @@ export async function decorateDMImages(main) {
                    return widthB - widthA;
                  });
                  
-                 // Get the smallest crop for fallback
-                 const smallestCropName = cropOrder[0];
+                 // Find the largest crop for fallback
+                 const largestCropWidth = Math.max(...cropOrder.map(cropName => {
+                  const crop = smartcrops[cropName];
+                  return crop ? parseInt(crop.width, 10) : 0;
+                }));
+                const extraLargeBreakpoint = Math.max(largestCropWidth + 1, 1920);
+
                  
                  // Create source sets (one for each smartcrop size)
                  // Build parameter string for rotate, flip, and crop
                  const advanceModifierParams = `${rotate ? '&rotate=' + rotate : ''}${flip ? '&flip=' + flip.toLowerCase() : ''}${crop ? '&crop=' + crop.toLowerCase() : ''}${preset ? '&preset=' + preset : ''}`;
                  
+                // Add source for extra large screens WITHOUT smartcrop FIRST
+                // This will be used for screens >= extraLargeBreakpoint (e.g., 1920px+)
+                const sourceWebpExtraLarge = document.createElement('source');
+                sourceWebpExtraLarge.type = "image/webp";
+                // No smartcrop parameter - uses original full-size image
+                sourceWebpExtraLarge.srcset = `${originalUrl}${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
+                sourceWebpExtraLarge.media = `(min-width: ${extraLargeBreakpoint}px)`;
+                pic.appendChild(sourceWebpExtraLarge);  
+
+
                  cropOrder.forEach((cropName, index) => {
                    const crop = smartcrops[cropName];
                    if (crop) {
