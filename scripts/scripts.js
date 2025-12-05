@@ -422,7 +422,7 @@ export async function decorateDMImages(main) {
                   const crop = smartcrops[cropName];
                   return crop ? parseInt(crop.width, 10) : 0;
                 }));
-                const extraLargeBreakpoint = Math.max(largestCropWidth + 1, 1920);
+                const extraLargeBreakpoint = Math.max(largestCropWidth + 1, 1300);
 
                  
                  // Create source sets (one for each smartcrop size)
