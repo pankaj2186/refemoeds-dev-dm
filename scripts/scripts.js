@@ -428,13 +428,12 @@ export async function decorateDMImages(main) {
                console.log("preset :"+preset);
                presetEl.parentElement.remove(); 
              }
-             
+            */
              if (dmOpenApiDiv) {
               // Remove all immediate (direct) child divs only
               const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
               directChildDivs.forEach(div => div.remove());
             }
-              */
          }
          let metadataUrl = getMetadataUrl(a.href);
            
