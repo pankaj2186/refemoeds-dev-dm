@@ -450,6 +450,8 @@ export async function decorateDMImages(main) {
                
                if (smartcrops) {
                  const pic = document.createElement('picture');
+                 pic.style.textAlign = 'center';
+
                   const originalUrl = new URL(a.href);
                  // Get base URL with extension
                  const baseUrl = a.href.split('?')[0];
