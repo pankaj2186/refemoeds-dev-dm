@@ -336,6 +336,7 @@ export function getMetadataUrl(url) {
  * @param {HTMLElement} main - The main container element that includes the links to be processed.
  */
 export async function decorateDMImages(main) {
+  
   const links = Array.from(main.querySelectorAll('a[href]'));
 
   for (const a of links) {
