@@ -312,15 +312,15 @@ export function getMetadataUrl(url) {
     // UUID format: 8-4-4-4-12 hexadecimal characters
     const urnPattern = /(\/adobe\/assets\/urn:aaid:aem:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
     const match = url.match(urnPattern);
-    
+
     if (!match) {
       return null;
     }
-    
+
     // Extract the base URL (protocol + hostname)
     const urlObj = new URL(url);
     const baseUrl = `${urlObj.protocol}//${urlObj.hostname}`;
-    
+
     // Construct the metadata URL
     return `${baseUrl}${match[1]}/metadata`;
   } catch (error) {
