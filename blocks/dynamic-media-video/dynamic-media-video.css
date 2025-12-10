@@ -1,1 +1,28 @@
+.dynamic-media-video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
+.dynamic-media-video video {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dynamic-media-video[data-video-loaded='false'] {
+  aspect-ratio: 16 / 9;
+  background-color: #f0f0f0;
+}
+
+.dynamic-media-video[data-video-loaded='error'] {
+  aspect-ratio: 16 / 9;
+  background-color: #f8d7da;
+}
+
+.dynamic-media-video-wrapper {
+  text-align: center;
+  width: 100%;
+}

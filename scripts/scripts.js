@@ -189,6 +189,7 @@ export async function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   decorateDMImages(main);
+  decorateDMVideos(main);
 }
 
 
@@ -511,6 +512,115 @@ function whatBlockIsThis(element) {
     if (currentElement.classList.length > 0) return currentElement.classList[0];
   }
   return null;
+}
+
+/**
+ * Decorates Dynamic Media video blocks by finding video asset links
+ * and rendering them as HTML5 video elements.
+ *
+ * @param {HTMLElement} main - The main container element that includes the video blocks.
+ */
+export async function decorateDMVideos(main) {
+  const videoBlocks = main.querySelectorAll('.dynamic-media-video');
+
+  for (const block of videoBlocks) {
+    const links = Array.from(block.querySelectorAll('a[href]'));
+
+    for (const a of links) {
+      const href = a.href;
+      const hrefLower = href.toLowerCase();
+
+      // Check if this is a DM OpenAPI URL
+      if (!isDMOpenAPIUrl(href)) continue;
+
+      // Check if this is a video file
+      const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
+      const isVideoAsset = videoExtensions.some((ext) => hrefLower.includes(ext));
+
+      if (!isVideoAsset) continue;
+
+      // Extract video options from authored content
+      const parentDiv = a.closest('div');
+      const container = parentDiv?.parentElement;
+      const siblings = [];
+
+      if (container) {
+        let current = container.nextElementSibling;
+        // Collect siblings for video options (title, autoplay, loop, muted)
+        while (current && siblings.length < 4) {
+          siblings.push(current);
+          current = current.nextElementSibling;
+        }
+      }
+
+      // Helper to safely consume a sibling element's trimmed text and remove it
+      const consumeSiblingText = (el) => {
+        if (!el) return '';
+        const text = el.textContent?.trim() || '';
+        if (text) el.remove();
+        return text;
+      };
+
+      // Extract video options: title, autoplay, loop, muted
+      const videoTitle = consumeSiblingText(siblings.shift()) || 'Dynamic Media Video';
+      const autoplay = consumeSiblingText(siblings.shift())?.toLowerCase() === 'true';
+      const loop = consumeSiblingText(siblings.shift())?.toLowerCase() === 'true';
+      const muted = consumeSiblingText(siblings.shift())?.toLowerCase() === 'true';
+
+      // Build video URL - use the href directly for DM OpenAPI delivery
+      const videoUrl = href.split('?')[0];
+
+      // Create video element
+      const video = document.createElement('video');
+      video.setAttribute('preload', 'metadata');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('controls', '');
+      video.setAttribute('title', videoTitle);
+
+      if (autoplay) {
+        video.setAttribute('autoplay', '');
+        // Autoplay requires muted for browser policy compliance
+        video.setAttribute('muted', '');
+      }
+      if (loop) video.setAttribute('loop', '');
+      if (muted) video.setAttribute('muted', '');
+
+      // Create source element
+      const sourceEl = document.createElement('source');
+      sourceEl.setAttribute('src', videoUrl);
+
+      // Determine video type from extension
+      const ext = videoUrl.split('.').pop()?.toLowerCase() || 'mp4';
+      const mimeTypes = {
+        mp4: 'video/mp4',
+        webm: 'video/webm',
+        ogg: 'video/ogg',
+        mov: 'video/quicktime',
+        m4v: 'video/mp4',
+        mkv: 'video/x-matroska',
+      };
+      sourceEl.setAttribute('type', mimeTypes[ext] || 'video/mp4');
+
+      video.appendChild(sourceEl);
+
+      // Clear block and append video
+      const directChildDivs = block.querySelectorAll(':scope > div');
+      directChildDivs.forEach((div) => div.remove());
+
+      block.appendChild(video);
+      block.dataset.videoLoaded = 'false';
+
+      // Handle video load states
+      video.addEventListener('loadedmetadata', () => {
+        block.dataset.videoLoaded = 'true';
+      });
+
+      video.addEventListener('error', () => {
+        console.error('Error loading DM video:', videoUrl);
+        block.dataset.videoLoaded = 'error';
+      });
+    }
+  }
 }
 
 /**
