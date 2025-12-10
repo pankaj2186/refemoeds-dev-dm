@@ -14,7 +14,7 @@
   - Dynamic Media Template
   - Content Fragments
   - List of Content Fragments
-
+  
 - **Site Template** for quick sites:
   - Quickly create and customize new sites as per your own brand
   - Template contains placeholder blocks with various styling options
