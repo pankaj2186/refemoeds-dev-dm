@@ -362,8 +362,53 @@ export async function decorateDMImages(main) {
                   if (isVideoAsset || blockName === 'video') continue;
                   
                   if(blockName && (blockName === 'dm-openapi' || blockName === 'dynamic-media-image')){
-          
-                      // Extract rotate, flip, crop, and preset using data-aue-prop attributes (matching DOM structure)
+                     // Extract rotate, flip, crop, and preset using data-aue-prop attributes (matching DOM structure)
+
+                      const parentDiv = a.closest('div');
+                        if (parentDiv && parentDiv.parentElement) {
+            
+                          const presetDiv = parentDiv.parentElement.nextElementSibling;
+                          if (presetDiv) {
+                              if (presetDiv && presetDiv.textContent.trim()) {
+                              preset = presetDiv.textContent.trim();
+                              // Remove the rotation div from markup
+                              presetDiv.remove();
+                              }
+                          }
+              
+                          const rotateDiv = presetDiv.nextElementSibling;
+                          if (rotateDiv) {
+                              if (rotateDiv && rotateDiv.textContent.trim()) {
+                              rotate = rotateDiv.textContent.trim();
+                              // Remove the rotation div from markup
+                              rotateDiv.remove();
+                              }
+                          }
+              
+                          const flipDiv = rotateDiv.nextElementSibling;
+                          if (flipDiv) {
+                              if (flipDiv && flipDiv.textContent.trim()) {
+                              flip = flipDiv.textContent.trim();
+                              // Remove the rotation div from markup
+                              flipDiv.remove();
+                              }
+                          }
+              
+                          const cropDiv = flipDiv.nextElementSibling;
+                          if (cropDiv) {
+                              if (cropDiv && cropDiv.textContent.trim()) {
+                              crop = cropDiv.textContent.trim();
+                              // Remove the rotation div from markup
+                              cropDiv.remove();
+                              }
+                          }
+                      }
+                     const presetEl = dmOpenApiDiv.querySelector('[data-aue-prop="preset"]');
+                      if (presetEl) {
+                          preset = presetEl.textContent.trim();
+                          presetEl.parentElement.remove(); // Remove the property div
+                      }
+                    
                       const rotateEl = dmOpenApiDiv.querySelector('[data-aue-prop="rotate"]');
                       if (rotateEl) {
                           rotate = rotateEl.textContent.trim();
@@ -382,11 +427,7 @@ export async function decorateDMImages(main) {
                           cropEl.parentElement.remove(); // Remove the property div
                       }
                       
-                      const presetEl = dmOpenApiDiv.querySelector('[data-aue-prop="preset"]');
-                      if (presetEl) {
-                          preset = presetEl.textContent.trim();
-                          presetEl.parentElement.remove(); // Remove the property div
-                      }
+                     
                       
                       // Remove all immediate (direct) child divs only (cleanup remaining structure)
                       const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
