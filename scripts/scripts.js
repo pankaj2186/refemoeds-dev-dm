@@ -376,7 +376,7 @@ export async function decorateDMImages(main) {
                               }
                           }
               
-                          const rotateDiv = presetDiv.nextElementSibling;
+                          const rotateDiv = parentDiv.parentElement.nextElementSibling;
                           if (rotateDiv) {
                               if (rotateDiv && rotateDiv.textContent.trim()) {
                               rotate = rotateDiv.textContent.trim();
@@ -385,7 +385,7 @@ export async function decorateDMImages(main) {
                               }
                           }
               
-                          const flipDiv = rotateDiv.nextElementSibling;
+                          const flipDiv = parentDiv.parentElement.nextElementSibling;
                           if (flipDiv) {
                               if (flipDiv && flipDiv.textContent.trim()) {
                               flip = flipDiv.textContent.trim();
@@ -394,7 +394,7 @@ export async function decorateDMImages(main) {
                               }
                           }
               
-                          const cropDiv = flipDiv.nextElementSibling;
+                          const cropDiv = parentDiv.parentElement.nextElementSibling;
                           if (cropDiv) {
                               if (cropDiv && cropDiv.textContent.trim()) {
                               crop = cropDiv.textContent.trim();
@@ -403,32 +403,6 @@ export async function decorateDMImages(main) {
                               }
                           }
                       }
-                     const presetEl = dmOpenApiDiv.querySelector('[data-aue-prop="preset"]');
-                      if (presetEl) {
-                          preset = presetEl.textContent.trim();
-                          presetEl.parentElement.remove(); // Remove the property div
-                      }
-                    
-                      const rotateEl = dmOpenApiDiv.querySelector('[data-aue-prop="rotate"]');
-                      if (rotateEl) {
-                          rotate = rotateEl.textContent.trim();
-                          rotateEl.parentElement.remove(); // Remove the property div
-                      }
-                      
-                      const flipEl = dmOpenApiDiv.querySelector('[data-aue-prop="flip"]');
-                      if (flipEl) {
-                          flip = flipEl.textContent.trim();
-                          flipEl.parentElement.remove(); // Remove the property div
-                      }
-                      
-                      const cropEl = dmOpenApiDiv.querySelector('[data-aue-prop="crop"]');
-                      if (cropEl) {
-                          crop = cropEl.textContent.trim();
-                          cropEl.parentElement.remove(); // Remove the property div
-                      }
-                      
-                     
-                      
                       // Remove all immediate (direct) child divs only (cleanup remaining structure)
                       const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
                       directChildDivs.forEach(div => div.remove());
