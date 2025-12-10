@@ -237,8 +237,8 @@
       "fields": [
         {
             "component": "custom-asset-namespace:custom-asset",
-            "name": "image",
-            "label": "Image",
+            "name": "video",
+            "label": "Video",
             "configUrl": "/content/dam/refdemo-eds-dev/en/video.config.json",
             "valueType": "string"
         },
