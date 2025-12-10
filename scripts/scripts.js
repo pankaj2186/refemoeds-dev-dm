@@ -189,6 +189,7 @@ export async function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   decorateDMImages(main);
+  decorateDMVideos(main);
 }
 
 
@@ -511,6 +512,156 @@ function whatBlockIsThis(element) {
     if (currentElement.classList.length > 0) return currentElement.classList[0];
   }
   return null;
+}
+
+/**
+ * Decorates Dynamic Media video blocks by finding video asset links
+ * and rendering them appropriately (iframe for DM player URLs, video element for raw files).
+ *
+ * @param {HTMLElement} main - The main container element that includes the video blocks.
+ */
+export async function decorateDMVideos(main) {
+  const videoBlocks = main.querySelectorAll('.dynamic-media-video');
+
+  for (const block of videoBlocks) {
+    const links = Array.from(block.querySelectorAll('a[href]'));
+
+    for (const a of links) {
+      const href = a.href;
+      const hrefLower = href.toLowerCase();
+
+      // Check if this is a DM OpenAPI URL
+      if (!isDMOpenAPIUrl(href)) continue;
+
+      // Check if this is a DM player URL (ends with /play)
+      const isDMPlayerUrl = href.includes('/play');
+
+      // Check if this is a video file
+      const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
+      const isVideoAsset = videoExtensions.some((ext) => hrefLower.includes(ext));
+
+      // Must be either a DM player URL or a video file
+      if (!isDMPlayerUrl && !isVideoAsset) continue;
+
+      // Extract video options from authored content
+      const parentDiv = a.closest('div');
+      const container = parentDiv?.parentElement;
+      const siblings = [];
+
+      if (container) {
+        let current = container.nextElementSibling;
+        // Collect siblings for video options (title, autoplay, loop, muted)
+        while (current && siblings.length < 4) {
+          siblings.push(current);
+          current = current.nextElementSibling;
+        }
+      }
+
+      // Helper to safely consume a sibling element's trimmed text and remove it
+      const consumeSiblingText = (el) => {
+        if (!el) return '';
+        const text = el.textContent?.trim() || '';
+        if (text) el.remove();
+        return text;
+      };
+
+      // Extract video options: title, autoplay, loop, muted
+      const videoTitle = consumeSiblingText(siblings.shift()) || 'Dynamic Media Video';
+      const autoplay = consumeSiblingText(siblings.shift())?.toLowerCase() === 'true';
+      const loop = consumeSiblingText(siblings.shift())?.toLowerCase() === 'true';
+      const muted = consumeSiblingText(siblings.shift())?.toLowerCase() === 'true';
+
+      // Clear block content
+      const directChildDivs = block.querySelectorAll(':scope > div');
+      directChildDivs.forEach((div) => div.remove());
+
+      if (isDMPlayerUrl) {
+        // DM OpenAPI player URL - embed as iframe
+        // URL format: https://delivery-{id}.adobeaemcloud.com/adobe/assets/urn:aaid:aem:{uuid}/play
+        let playerUrl = href;
+
+        // Add query parameters for player options
+        const params = new URLSearchParams();
+        if (autoplay) params.set('autoplay', '1');
+        if (loop) params.set('loop', '1');
+        if (muted || autoplay) params.set('muted', '1'); // Mute if autoplay for browser policy
+
+        const paramString = params.toString();
+        if (paramString) {
+          playerUrl += (playerUrl.includes('?') ? '&' : '?') + paramString;
+        }
+
+        // Create responsive iframe wrapper
+        const iframeWrapper = document.createElement('div');
+        iframeWrapper.className = 'dm-video-player-wrapper';
+        iframeWrapper.style.cssText = 'position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;';
+
+        const iframe = document.createElement('iframe');
+        iframe.src = playerUrl;
+        iframe.title = videoTitle;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; encrypted-media');
+        iframe.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;';
+
+        iframeWrapper.appendChild(iframe);
+        block.appendChild(iframeWrapper);
+        block.dataset.videoLoaded = 'true';
+
+        iframe.addEventListener('load', () => {
+          block.dataset.videoLoaded = 'true';
+        });
+
+        iframe.addEventListener('error', () => {
+          console.error('Error loading DM video player:', playerUrl);
+          block.dataset.videoLoaded = 'error';
+        });
+      } else {
+        // Raw video file - use HTML5 video element
+        const videoUrl = href.split('?')[0];
+
+        const video = document.createElement('video');
+        video.setAttribute('preload', 'metadata');
+        video.setAttribute('playsinline', '');
+        video.setAttribute('controls', '');
+        video.setAttribute('title', videoTitle);
+
+        if (autoplay) {
+          video.setAttribute('autoplay', '');
+          video.setAttribute('muted', '');
+        }
+        if (loop) video.setAttribute('loop', '');
+        if (muted) video.setAttribute('muted', '');
+
+        const sourceEl = document.createElement('source');
+        sourceEl.setAttribute('src', videoUrl);
+
+        const ext = videoUrl.split('.').pop()?.toLowerCase() || 'mp4';
+        const mimeTypes = {
+          mp4: 'video/mp4',
+          webm: 'video/webm',
+          ogg: 'video/ogg',
+          mov: 'video/quicktime',
+          m4v: 'video/mp4',
+          mkv: 'video/x-matroska',
+        };
+        sourceEl.setAttribute('type', mimeTypes[ext] || 'video/mp4');
+
+        video.appendChild(sourceEl);
+        block.appendChild(video);
+        block.dataset.videoLoaded = 'false';
+
+        video.addEventListener('loadedmetadata', () => {
+          block.dataset.videoLoaded = 'true';
+        });
+
+        video.addEventListener('error', () => {
+          console.error('Error loading DM video:', videoUrl);
+          block.dataset.videoLoaded = 'error';
+        });
+      }
+    }
+  }
 }
 
 /**
