@@ -361,7 +361,7 @@ export async function decorateDMImages(main) {
          const isVideoAsset = videoExtensions.some(ext => a.href.toLowerCase().includes(ext));
          if (isVideoAsset || blockName === 'video') continue;
          
-         if(blockName && blockName === 'dm-openapi'){
+         if(blockName && (blockName === 'dm-openapi' || blockName === 'dynamic-media-image')){
 
           const parentDiv = a.closest('div');
           if (parentDiv && parentDiv.parentElement) {
