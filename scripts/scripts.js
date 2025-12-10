@@ -365,44 +365,39 @@ export async function decorateDMImages(main) {
                      // Extract rotate, flip, crop, and preset using data-aue-prop attributes (matching DOM structure)
 
                       const parentDiv = a.closest('div');
-                        if (parentDiv && parentDiv.parentElement) {
-            
-                          const presetDiv = parentDiv.parentElement.nextElementSibling;
-                          if (presetDiv) {
-                              if (presetDiv && presetDiv.textContent.trim()) {
-                              preset = presetDiv.textContent.trim();
-                              // Remove the rotation div from markup
-                              presetDiv.remove();
-                              }
+
+                          if (parentDiv && parentDiv.parentElement) {
+                            // We intentionally walk siblings *in order* so each param uses a different node.
+                            let current = parentDiv.parentElement.nextElementSibling;
+                    
+                            // preset
+                            if (current && current.textContent.trim()) {
+                              preset = current.textContent.trim();
+                              current.remove();
+                            }
+                    
+                            // rotate
+                            current = parentDiv.parentElement.nextElementSibling;
+                            if (current && current.textContent.trim()) {
+                              rotate = current.textContent.trim();
+                              current.remove();
+                            }
+                    
+                            // flip
+                            current = parentDiv.parentElement.nextElementSibling;
+                            if (current && current.textContent.trim()) {
+                              flip = current.textContent.trim();
+                              current.remove();
+                            }
+                    
+                            // crop
+                            current = parentDiv.parentElement.nextElementSibling;
+                            if (current && current.textContent.trim()) {
+                              crop = current.textContent.trim();
+                              current.remove();
+                            }
                           }
-              
-                          const rotateDiv = parentDiv.parentElement.nextElementSibling;
-                          if (rotateDiv) {
-                              if (rotateDiv && rotateDiv.textContent.trim()) {
-                              rotate = rotateDiv.textContent.trim();
-                              // Remove the rotation div from markup
-                              rotateDiv.remove();
-                              }
-                          }
-              
-                          const flipDiv = parentDiv.parentElement.nextElementSibling;
-                          if (flipDiv) {
-                              if (flipDiv && flipDiv.textContent.trim()) {
-                              flip = flipDiv.textContent.trim();
-                              // Remove the rotation div from markup
-                              flipDiv.remove();
-                              }
-                          }
-              
-                          const cropDiv = parentDiv.parentElement.nextElementSibling;
-                          if (cropDiv) {
-                              if (cropDiv && cropDiv.textContent.trim()) {
-                              crop = cropDiv.textContent.trim();
-                              // Remove the rotation div from markup
-                              cropDiv.remove();
-                              }
-                          }
-                      }
+                          
                       // Remove all immediate (direct) child divs only (cleanup remaining structure)
                       const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
                       directChildDivs.forEach(div => div.remove());
