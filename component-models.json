@@ -113,7 +113,7 @@
           "valueType": "boolean",
           "name": "enableSmartCrop",
           "label": "Enable Smart Crop",
-          "value":"false"
+          "value":false
         },
         {
             "component": "select",
