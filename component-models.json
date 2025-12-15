@@ -99,7 +99,7 @@
             "component": "custom-asset-namespace:custom-asset",
             "name": "image",
             "label": "Image",
-            "configUrl": "/content/dam/image.config.json",
+            "configUrl": "/content/dam/config/image.config.json",
             "valueType": "string"
         },
         {
@@ -526,7 +526,7 @@
           "component": "custom-asset-namespace:custom-asset",
           "name": "image",
           "label": "Image",
-          "configUrl": "/content/dam/image.config.json",
+          "configUrl": "/content/dam/config/image.config.json",
           "valueType": "string"
         },
         {
