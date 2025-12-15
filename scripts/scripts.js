@@ -375,7 +375,7 @@ export async function decorateDMImages(main) {
     const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
     const isVideoAsset = videoExtensions.some((ext) => hrefLower.includes(ext));
     if (isVideoAsset || blockName === 'video') continue;
-
+    /*
     // Extract advanced modifiers only for dynamic-media blocks
     if (blockName === 'dm-openapi' || blockName === 'dynamic-media-image') {
       const parentDiv = a.closest('div');
@@ -505,6 +505,7 @@ export async function decorateDMImages(main) {
 
     pic.appendChild(img);
     dmOpenApiDiv.appendChild(pic);
+    */
   }
 }
 
