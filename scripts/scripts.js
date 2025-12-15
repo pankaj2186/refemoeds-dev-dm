@@ -363,6 +363,7 @@ export async function decorateDMImages(main) {
     let preset = '';
     let extend = '';
     let backgroundcolor = '';
+    let enableSmartCrop = '';
 
     if (blockBeingDecorated) {
       blockName = Array.from(blockBeingDecorated.classList).find(
@@ -385,7 +386,7 @@ export async function decorateDMImages(main) {
         let current = container.nextElementSibling;
 
         // Collect up to 4 siblings (preset, rotate, flip, crop) in order
-        while (current && siblings.length < 6) {
+        while (current && siblings.length < 7) {
           siblings.push(current);
           current = current.nextElementSibling;
         }
@@ -400,9 +401,10 @@ export async function decorateDMImages(main) {
 
         // Order matters: preset, rotate, flip, crop
         if (siblings.length > 0) {
+          enableSmartCrop = consumeSiblingText(siblings.shift());
+          preset = consumeSiblingText(siblings.shift());
           extend = consumeSiblingText(siblings.shift());
           backgroundcolor = consumeSiblingText(siblings.shift());
-          preset = consumeSiblingText(siblings.shift());
           rotate = consumeSiblingText(siblings.shift());
           flip = consumeSiblingText(siblings.shift());
           cropValue = consumeSiblingText(siblings.shift());
