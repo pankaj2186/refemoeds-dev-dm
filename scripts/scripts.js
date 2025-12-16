@@ -516,7 +516,7 @@ export async function decorateDMImages(main) {
     const isGifFile = hrefLower.endsWith('.gif');
     const containsOriginal = href.includes('/original/');
     const dmOpenApiDiv =
-      a.closest('.dm-openapi') || a.closest('.dynamic-media-image');
+      img.closest('.dm-openapi') || img.closest('.dynamic-media-image');
 
     if (!dmOpenApiDiv) continue;
 
@@ -546,7 +546,7 @@ export async function decorateDMImages(main) {
     
     // Extract advanced modifiers only for dynamic-media blocks
     if (blockName === 'dm-openapi' || blockName === 'dynamic-media-image') {
-      const parentDiv = a.closest('div');
+      const parentDiv = img.closest('div');
       if (parentDiv && parentDiv.parentElement) {
         const container = parentDiv.parentElement;
         const siblings = [];
