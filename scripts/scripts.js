@@ -597,6 +597,9 @@ export async function decorateDMImages(main) {
         ? `&preset=${encodeURIComponent(preset)}`
         : '');
 
+    const originalUrl = new URL(href);
+    const hasQueryParams = originalUrl.toString().includes('?');
+    const paramSeparator = hasQueryParams ? '&' : '?';
     const baseParams = `${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
 
 
@@ -625,10 +628,6 @@ export async function decorateDMImages(main) {
         // Build picture and sources
         const pic = document.createElement('picture');
         pic.style.textAlign = 'center';
-
-        const originalUrl = new URL(href);
-        const hasQueryParams = originalUrl.toString().includes('?');
-        const paramSeparator = hasQueryParams ? '&' : '?';
 
         const cropKeys = Object.keys(smartcrops);
         if (!cropKeys.length) continue;
