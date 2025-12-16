@@ -601,6 +601,7 @@ export async function decorateDMImages(main) {
     const hasQueryParams = originalUrl.toString().includes('?');
     const paramSeparator = hasQueryParams ? '&' : '?';
     const baseParams = `${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
+    const pic = document.createElement('picture');
 
 
     // Only add smart crop sources if enableSmartCrop is true
@@ -626,7 +627,6 @@ export async function decorateDMImages(main) {
         if (!smartcrops) continue;
 
         // Build picture and sources
-        const pic = document.createElement('picture');
         pic.style.textAlign = 'center';
 
         const cropKeys = Object.keys(smartcrops);
