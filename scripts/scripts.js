@@ -680,7 +680,7 @@ export async function decorateDMImages(main) {
     const img = document.createElement('img');
     img.loading = 'lazy';
     img.src = fallbackUrl;
-    img.alt = href !== a.title ? a.title || '' : '';
+    //img.alt = href !== a.title ? a.title || '' : '';
 
     pic.appendChild(img);
     dmOpenApiDiv.appendChild(pic);
