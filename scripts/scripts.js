@@ -338,7 +338,7 @@ export function getMetadataUrl(url) {
 export async function decorateDMImages(main) {
   
   const links = Array.from(main.querySelectorAll('a[href]'));
-  const images = Array.from(document.querySelectorAll('.dynamic-media-image img'));
+  const images = Array.from(main.querySelectorAll('.dynamic-media-image img'));
 
   /*
   for (const a of links) {
