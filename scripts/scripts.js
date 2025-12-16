@@ -508,7 +508,7 @@ export async function decorateDMImages(main) {
   }
   */
 
-  for (const img of images) {
+  for (const image of images) {
     let href = "https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:34dcfac0-7ca6-431d-a79a-4aba388d7890/as/cycling-in-tuscany.avif?assetname=cycling-in-tuscany.jpg";
     const hrefLower = href.toLowerCase();
     if (!isDMOpenAPIUrl(href)) continue;
@@ -516,7 +516,7 @@ export async function decorateDMImages(main) {
     const isGifFile = hrefLower.endsWith('.gif');
     const containsOriginal = href.includes('/original/');
     const dmOpenApiDiv =
-      img.closest('.dm-openapi') || img.closest('.dynamic-media-image');
+      image.closest('.dm-openapi') || image.closest('.dynamic-media-image');
 
     if (!dmOpenApiDiv) continue;
 
@@ -546,7 +546,7 @@ export async function decorateDMImages(main) {
     
     // Extract advanced modifiers only for dynamic-media blocks
     if (blockName === 'dm-openapi' || blockName === 'dynamic-media-image') {
-      const parentDiv = img.closest('div');
+      const parentDiv = image.closest('div');
       if (parentDiv && parentDiv.parentElement) {
         const container = parentDiv.parentElement;
         const siblings = [];
