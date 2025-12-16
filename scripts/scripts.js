@@ -582,51 +582,6 @@ export async function decorateDMImages(main) {
       const directChildDivs = dmOpenApiDiv.querySelectorAll(':scope > div');
       directChildDivs.forEach((div) => div.remove());
     }
-
-    const metadataUrl = getMetadataUrl(href);
-    if (!metadataUrl) continue;
-
-    let metadata;
-    try {
-      const response = await fetch(metadataUrl);
-      if (!response.ok) {
-        console.error(`Failed to fetch metadata: ${response.status}`);
-        continue;
-      }
-      metadata = await response.json();
-    } catch (error) {
-      console.error('Error fetching or processing metadata:', error);
-      continue;
-    }
-
-    const smartcrops = metadata?.repositoryMetadata?.smartcrops;
-    if (!smartcrops) continue;
-
-    // Build picture and sources
-    const pic = document.createElement('picture');
-    pic.style.textAlign = 'center';
-
-    const originalUrl = new URL(href);
-    const hasQueryParams = originalUrl.toString().includes('?');
-    const paramSeparator = hasQueryParams ? '&' : '?';
-
-    const cropKeys = Object.keys(smartcrops);
-    if (!cropKeys.length) continue;
-
-    // Sort crop keys by width desc (largest → smallest)
-    const cropOrder = cropKeys.sort((a, b) => {
-      const widthA = parseInt(smartcrops[a].width, 10) || 0;
-      const widthB = parseInt(smartcrops[b].width, 10) || 0;
-      return widthB - widthA;
-    });
-
-    const largestCropWidth = Math.max(
-      ...cropOrder.map((cropName) =>
-        parseInt(smartcrops[cropName].width, 10) || 0
-      )
-    );
-
-    const extraLargeBreakpoint = Math.max(largestCropWidth + 1, 1300);
     
     const advanceModifierParams =
     (rotate ? `&rotate=${encodeURIComponent(rotate)}` : '') +
@@ -647,6 +602,52 @@ export async function decorateDMImages(main) {
 
     // Only add smart crop sources if enableSmartCrop is true
     if (enableSmartCrop === true || enableSmartCrop === 'true') {
+
+        const metadataUrl = getMetadataUrl(href);
+        if (!metadataUrl) continue;
+
+        let metadata;
+        try {
+          const response = await fetch(metadataUrl);
+          if (!response.ok) {
+            console.error(`Failed to fetch metadata: ${response.status}`);
+            continue;
+          }
+          metadata = await response.json();
+        } catch (error) {
+          console.error('Error fetching or processing metadata:', error);
+          continue;
+        }
+
+        const smartcrops = metadata?.repositoryMetadata?.smartcrops;
+        if (!smartcrops) continue;
+
+        // Build picture and sources
+        const pic = document.createElement('picture');
+        pic.style.textAlign = 'center';
+
+        const originalUrl = new URL(href);
+        const hasQueryParams = originalUrl.toString().includes('?');
+        const paramSeparator = hasQueryParams ? '&' : '?';
+
+        const cropKeys = Object.keys(smartcrops);
+        if (!cropKeys.length) continue;
+
+        // Sort crop keys by width desc (largest → smallest)
+        const cropOrder = cropKeys.sort((a, b) => {
+          const widthA = parseInt(smartcrops[a].width, 10) || 0;
+          const widthB = parseInt(smartcrops[b].width, 10) || 0;
+          return widthB - widthA;
+        });
+
+        const largestCropWidth = Math.max(
+          ...cropOrder.map((cropName) =>
+            parseInt(smartcrops[cropName].width, 10) || 0
+          )
+        );
+
+        const extraLargeBreakpoint = Math.max(largestCropWidth + 1, 1300);
+
         // Extra-large screen source (no smartcrop)
         const sourceWebpExtraLarge = document.createElement('source');
         sourceWebpExtraLarge.type = 'image/webp';
