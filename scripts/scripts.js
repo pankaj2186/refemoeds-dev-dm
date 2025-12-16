@@ -568,7 +568,7 @@ export async function decorateDMImages(main) {
 
         // Order matters: preset, rotate, flip, crop
         if (siblings.length > 0) {
-          enableSmartCrop = consumeSiblingText(siblings.shift());
+          enableSmartCrop = consumeSiblingText(siblings.shift()) || false;
           preset = consumeSiblingText(siblings.shift());
           extend = consumeSiblingText(siblings.shift());
           backgroundcolor = consumeSiblingText(siblings.shift());
@@ -627,41 +627,53 @@ export async function decorateDMImages(main) {
     );
 
     const extraLargeBreakpoint = Math.max(largestCropWidth + 1, 1300);
-
+    
     const advanceModifierParams =
-      (rotate ? `&rotate=${encodeURIComponent(rotate)}` : '') +
-      (flip ? `&flip=${encodeURIComponent(flip.toLowerCase())}` : '') +
-      (cropValue ? `&crop=${encodeURIComponent(cropValue.toLowerCase())}` : '') +
-      (preset ? `&preset=${encodeURIComponent(preset)}` : '');
+    (rotate ? `&rotate=${encodeURIComponent(rotate)}` : '') +
+    (flip ? `&flip=${encodeURIComponent(flip.toLowerCase())}` : '') +
+    (cropValue ? `&crop=${encodeURIComponent(cropValue.toLowerCase())}` : '') +
+    (preset && preset.toLowerCase() === 'border' 
+      ? (extend && backgroundcolor 
+          ? `&extend=${encodeURIComponent(extend)}&background-color=rgb,${encodeURIComponent(backgroundcolor.replace('#', ''))}`
+          : extend 
+            ? `&extend=${encodeURIComponent(extend)}`
+            : '')
+      : preset 
+        ? `&preset=${encodeURIComponent(preset)}`
+        : '');
 
     const baseParams = `${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
 
-    // Extra-large screen source (no smartcrop)
-    const sourceWebpExtraLarge = document.createElement('source');
-    sourceWebpExtraLarge.type = 'image/webp';
-    sourceWebpExtraLarge.srcset = `${originalUrl}${baseParams}`;
-    sourceWebpExtraLarge.media = `(min-width: ${extraLargeBreakpoint}px)`;
-    pic.appendChild(sourceWebpExtraLarge);
 
-    // Smartcrop sources
-    cropOrder.forEach((cropName) => {
-      const crop = smartcrops[cropName];
-      if (!crop) return;
+    // Only add smart crop sources if enableSmartCrop is true
+    if (enableSmartCrop === true || enableSmartCrop === 'true') {
+        // Extra-large screen source (no smartcrop)
+        const sourceWebpExtraLarge = document.createElement('source');
+        sourceWebpExtraLarge.type = 'image/webp';
+        sourceWebpExtraLarge.srcset = `${originalUrl}${baseParams}`;
+        sourceWebpExtraLarge.media = `(min-width: ${extraLargeBreakpoint}px)`;
+        pic.appendChild(sourceWebpExtraLarge);
 
-      const minWidth = parseInt(crop.width, 10) || 0;
-      const smartcropParam = `${paramSeparator}smartcrop=${encodeURIComponent(
-        cropName
-      )}`;
+        // Smartcrop sources
+        cropOrder.forEach((cropName) => {
+          const crop = smartcrops[cropName];
+          if (!crop) return;
 
-      const sourceWebp = document.createElement('source');
-      sourceWebp.type = 'image/webp';
-      sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
-      if (minWidth > 0) {
-        sourceWebp.media = `(min-width: ${minWidth}px)`;
-      }
+          const minWidth = parseInt(crop.width, 10) || 0;
+          const smartcropParam = `${paramSeparator}smartcrop=${encodeURIComponent(
+            cropName
+          )}`;
 
-      pic.appendChild(sourceWebp);
-    });
+          const sourceWebp = document.createElement('source');
+          sourceWebp.type = 'image/webp';
+          sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
+          if (minWidth > 0) {
+            sourceWebp.media = `(min-width: ${minWidth}px)`;
+          }
+
+          pic.appendChild(sourceWebp);
+        });
+    }
 
     // Fallback image
     const fallbackUrl = `${originalUrl}${baseParams}`;
