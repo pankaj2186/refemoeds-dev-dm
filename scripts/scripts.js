@@ -523,7 +523,7 @@ export async function decorateDMImages(main) {
     // Skip non-originals except GIF, as per your logic
     if (containsOriginal && !isGifFile) continue;
 
-    const blockBeingDecorated = whatBlockIsThis(a);
+    const blockBeingDecorated = whatBlockIsThis(image);
     let blockName = '';
     let rotate = '';
     let flip = '';
