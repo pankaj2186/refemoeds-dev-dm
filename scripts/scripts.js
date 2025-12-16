@@ -340,7 +340,7 @@ export async function decorateDMImages(main) {
   const links = Array.from(main.querySelectorAll('a[href]'));
 
   for (const a of links) {
-    const href = a.href;
+    let href = a.href;
     const hrefLower = href.toLowerCase();
 
     if (!isDMOpenAPIUrl(href)) continue;
@@ -375,11 +375,11 @@ export async function decorateDMImages(main) {
     const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg', '.m4v', '.mkv'];
     const isVideoAsset = videoExtensions.some((ext) => hrefLower.includes(ext));
     if (isVideoAsset || blockName === 'video') continue;
-    /*
+    
     // Extract advanced modifiers only for dynamic-media blocks
     if (blockName === 'dm-openapi' || blockName === 'dynamic-media-image') {
       const parentDiv = a.closest('div');
-
+      href = "https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:34dcfac0-7ca6-431d-a79a-4aba388d7890/as/cycling-in-tuscany.avif?assetname=cycling-in-tuscany.jpg";
       if (parentDiv && parentDiv.parentElement) {
         const container = parentDiv.parentElement;
         const siblings = [];
@@ -505,7 +505,6 @@ export async function decorateDMImages(main) {
 
     pic.appendChild(img);
     dmOpenApiDiv.appendChild(pic);
-    */
   }
 }
 
