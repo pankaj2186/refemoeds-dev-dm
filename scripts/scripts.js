@@ -342,7 +342,7 @@ export async function decorateDMImages(main) {
   for (const a of links) {
     let href = a.href;
     const hrefLower = href.toLowerCase();
-
+    href = "https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:34dcfac0-7ca6-431d-a79a-4aba388d7890/as/cycling-in-tuscany.avif?assetname=cycling-in-tuscany.jpg";
     if (!isDMOpenAPIUrl(href)) continue;
 
     const isGifFile = hrefLower.endsWith('.gif');
@@ -379,7 +379,6 @@ export async function decorateDMImages(main) {
     // Extract advanced modifiers only for dynamic-media blocks
     if (blockName === 'dm-openapi' || blockName === 'dynamic-media-image') {
       const parentDiv = a.closest('div');
-      href = "https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:34dcfac0-7ca6-431d-a79a-4aba388d7890/as/cycling-in-tuscany.avif?assetname=cycling-in-tuscany.jpg";
       if (parentDiv && parentDiv.parentElement) {
         const container = parentDiv.parentElement;
         const siblings = [];
