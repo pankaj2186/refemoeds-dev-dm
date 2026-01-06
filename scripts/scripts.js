@@ -651,7 +651,7 @@ export async function decorateDMImages(main) {
 
         // Extra-large screen source (no smartcrop)
         const sourceWebpExtraLarge = document.createElement('source');
-        sourceWebpExtraLarge.type = '/webp';
+        sourceWebpExtraLarge.type = 'image/webp';
         sourceWebpExtraLarge.srcset = `${originalUrl}${baseParams}`;
         sourceWebpExtraLarge.media = `(min-width: ${extraLargeBreakpoint}px)`;
         pic.appendChild(sourceWebpExtraLarge);
