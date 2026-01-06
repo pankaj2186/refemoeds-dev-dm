@@ -525,7 +525,7 @@ export async function decorateDMImages(main) {
     // Skip non-originals except GIF, as per your logic
     if (containsOriginal && !isGifFile) continue;
 
-    const blockBeingDecorated = whatBlockIsThis(image);
+    const blockBeingDecorated = whatBlockIsThis(a);
     let blockName = '';
     let rotate = '';
     let flip = '';
@@ -547,8 +547,8 @@ export async function decorateDMImages(main) {
     if (isVideoAsset || blockName === 'video') continue;
     
     // Extract advanced modifiers only for dynamic-media blocks
-    if (blockName === 'dm-openapi' || blockName === 'dynamic-media-image') {
-      const parentDiv = image.closest('div');
+    if (blockName === 'dm-openapi' || blockName === 'dynamic-media-') {
+      const parentDiv = .closest('div');
       if (parentDiv && parentDiv.parentElement) {
         const container = parentDiv.parentElement;
         const siblings = [];
@@ -651,7 +651,7 @@ export async function decorateDMImages(main) {
 
         // Extra-large screen source (no smartcrop)
         const sourceWebpExtraLarge = document.createElement('source');
-        sourceWebpExtraLarge.type = 'image/webp';
+        sourceWebpExtraLarge.type = '/webp';
         sourceWebpExtraLarge.srcset = `${originalUrl}${baseParams}`;
         sourceWebpExtraLarge.media = `(min-width: ${extraLargeBreakpoint}px)`;
         pic.appendChild(sourceWebpExtraLarge);
@@ -667,7 +667,7 @@ export async function decorateDMImages(main) {
           )}`;
 
           const sourceWebp = document.createElement('source');
-          sourceWebp.type = 'image/webp';
+          sourceWebp.type = '/webp';
           sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
           if (minWidth > 0) {
             sourceWebp.media = `(min-width: ${minWidth}px)`;
@@ -677,7 +677,7 @@ export async function decorateDMImages(main) {
         });
     }
 
-    // Fallback image
+    // Fallback 
     const fallbackUrl = `${originalUrl}${baseParams}`;
     const img = document.createElement('img');
     img.loading = 'lazy';
@@ -851,7 +851,7 @@ export async function decorateDMVideos(main) {
 }
 
 /**
- * remove the adujusts the auto images
+ * remove the adujusts the auto s
  * @param {Element} main The container element
  */
 function adjustAutoImages(main) {
