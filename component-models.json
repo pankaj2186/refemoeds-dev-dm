@@ -154,30 +154,25 @@
           "condition": { "==": [{ "var": "preset" }, "border"] }
         },
         {
-          "id": "container",
+          "component": "container",
+          "label": "Border Settings",
+          "name": "borderSettings",
+          "valueType": "string",
+          "condition": { "==": [{ "var": "preset" }, "border"] },
           "fields": [
             {
-              "component": "container",
-              "label": "Border Preset Settings",
-              "name": "borderPresetSettings",
+              "component": "text",
               "valueType": "string",
-              "collapsible": true,
-              "fields": [
-                {
-                  "component": "text",
-                  "valueType": "string",
-                  "name": "extend1",
-                  "label": "Extend",
-                  "description": "Provide value in Left,top,right,bottom format e.g. 10,10,10,10 to add a 10 pixel padding on all sides"
-                },
-                {
-                  "component": "text",
-                  "valueType": "string",
-                  "name": "borderbgcolor1",
-                  "label": "Border Color",
-                  "description": "Provide hexcode of the color without # e.g. FFFFFF"
-                },
-              ]
+              "name": "extend1",
+              "label": "Extend",
+              "description": "Provide value in Left,top,right,bottom format e.g. 10,10,10,10 to add a 10 pixel padding on all sides"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "borderbgcolor1",
+              "label": "Border Color",
+              "description": "Provide hexcode of the color without # e.g. FFFFFF"
             }
           ]
         },
