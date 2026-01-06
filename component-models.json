@@ -157,7 +157,7 @@
           "name": "borderPresetFieldGroup",
           "component": "panel",
           "label": "Border Preset Settings",
-          "condition": { "==": [{ "var": "preset" }, "border"] }
+          "condition": { "==": [{ "var": "preset" }, "border"] },
           "fields": [
             {
               "component": "text",
