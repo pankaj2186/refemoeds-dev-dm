@@ -507,16 +507,18 @@ export async function decorateDMImages(main) {
     dmOpenApiDiv.appendChild(pic);
   }
   */
-
-  for (const image of images) {
-    let href = "https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:34dcfac0-7ca6-431d-a79a-4aba388d7890/as/cycling-in-tuscany.avif?assetname=cycling-in-tuscany.jpg";
+  
+  //for (const image of images) {
+  for (const a of links) {
+    let href = a.href;
+    //let href = "https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:34dcfac0-7ca6-431d-a79a-4aba388d7890/as/cycling-in-tuscany.avif?assetname=cycling-in-tuscany.jpg";
     const hrefLower = href.toLowerCase();
     if (!isDMOpenAPIUrl(href)) continue;
 
     const isGifFile = hrefLower.endsWith('.gif');
     const containsOriginal = href.includes('/original/');
     const dmOpenApiDiv =
-      image.closest('.dm-openapi') || image.closest('.dynamic-media-image');
+      a.closest('.dm-openapi') || a.closest('.dynamic-media-image');
 
     if (!dmOpenApiDiv) continue;
 
