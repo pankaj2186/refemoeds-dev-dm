@@ -154,28 +154,6 @@
           "condition": { "==": [{ "var": "preset" }, "border"] }
         },
         {
-          "name": "borderPresetFieldGroup",
-          "component": "container",
-          "label": "Border Preset Settings",
-          "condition": { "==": [{ "var": "preset" }, "border"] },
-          "fields": [
-            {
-              "component": "text",
-              "valueType": "string",
-              "name": "extend1",
-              "label": "Extend",
-              "description": "Provide value in Left,top,right,bottom format e.g. 10,10,10,10 to add a 10 pixel padding on all sides",
-            },
-            {
-              "component": "text",
-              "valueType": "string",
-              "name": "borderbgcolor1",
-              "label": "Border Color",
-              "description": "Provide hexcode of the color without # e.g. FFFFFF",
-            }
-          ]
-        },
-        {
             "component": "select",
             "name": "rotate",
             "value": "",
