@@ -138,22 +138,6 @@
             ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "extend",
-          "label": "Extend",
-          "description": "Provide value in Left,top,right,bottom format e.g. 10,10,10,10 to add a 10 pixel padding on all sides",
-          "condition": { "==": [{ "var": "preset" }, "border"] }
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "borderbgcolor",
-          "label": "Border Color",
-          "description": "Provide hexcode of the color without # e.g. FFFFFF",
-          "condition": { "==": [{ "var": "preset" }, "border"] }
-        },
-        {
           "component": "container",
           "label": "Border Settings",
           "name": "borderSettings",
@@ -163,14 +147,14 @@
             {
               "component": "text",
               "valueType": "string",
-              "name": "extend1",
+              "name": "extend",
               "label": "Extend",
               "description": "Provide value in Left,top,right,bottom format e.g. 10,10,10,10 to add a 10 pixel padding on all sides"
             },
             {
               "component": "text",
               "valueType": "string",
-              "name": "borderbgcolor1",
+              "name": "borderbgcolor",
               "label": "Border Color",
               "description": "Provide hexcode of the color without # e.g. FFFFFF"
             }
