@@ -155,7 +155,7 @@
         },
         {
           "name": "borderPresetFieldGroup",
-          "component": "panel",
+          "component": "container",
           "label": "Border Preset Settings",
           "condition": { "==": [{ "var": "preset" }, "border"] },
           "fields": [
