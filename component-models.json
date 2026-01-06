@@ -165,7 +165,6 @@
               "name": "extend1",
               "label": "Extend",
               "description": "Provide value in Left,top,right,bottom format e.g. 10,10,10,10 to add a 10 pixel padding on all sides",
-              "condition": { "==": [{ "var": "preset" }, "border"] }
             },
             {
               "component": "text",
@@ -173,7 +172,6 @@
               "name": "borderbgcolor1",
               "label": "Border Color",
               "description": "Provide hexcode of the color without # e.g. FFFFFF",
-              "condition": { "==": [{ "var": "preset" }, "border"] }
             }
           ]
         },
