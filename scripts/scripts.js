@@ -548,7 +548,7 @@ export async function decorateDMImages(main) {
     
     // Extract advanced modifiers only for dynamic-media blocks
     if (blockName === 'dm-openapi' || blockName === 'dynamic-media-') {
-      const parentDiv = .closest('div');
+      const parentDiv = a.closest('div');
       if (parentDiv && parentDiv.parentElement) {
         const container = parentDiv.parentElement;
         const siblings = [];
