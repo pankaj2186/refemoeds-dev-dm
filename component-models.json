@@ -261,7 +261,7 @@
             "component": "custom-asset-namespace:custom-asset",
             "name": "video",
             "label": "Video",
-            "configUrl": "/content/dam/refdemo-eds-dev/en/video.config.json",
+            "configUrl": "/content/dam/config/video.config.json",
             "valueType": "string"
         },
         {
