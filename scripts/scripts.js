@@ -650,7 +650,7 @@ import {
 	  const originalUrl = new URL(href);
 	  const hasQueryParams = originalUrl.toString().includes('?');
 	  const paramSeparator = hasQueryParams ? '&' : '?';
-	  const baseParams = `${paramSeparator}quality=85${advanceModifierParams}`;
+	  const baseParams = `${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
 	  const pic = document.createElement('picture');
   
   
@@ -673,6 +673,7 @@ import {
 		  }
   
 		  const smartcrops = metadata?.repositoryMetadata?.smartcrops;
+		  const mimeType = metadata?.repositoryMetadata?.["dc:format"];
 		  if (smartcrops){
 				// Build picture and sources
 				pic.style.textAlign = 'center';
@@ -713,7 +714,7 @@ import {
 					)}`;
 		
 					const sourceWebp = document.createElement('source');
-					sourceWebp.type = '/webp';
+					sourceWebp.type = mimeType ? mimeType : "image/webp";
 					sourceWebp.srcset = `${originalUrl}${smartcropParam}&quality=85&preferwebp=true${advanceModifierParams}`;
 					if (minWidth > 0) {
 					sourceWebp.media = `(min-width: ${minWidth}px)`;
