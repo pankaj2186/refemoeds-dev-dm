@@ -585,6 +585,53 @@ import {
 		directChildDivs.forEach((div) => div.remove());
 	  }
 	  
+
+	   // Build advanced modifier parameters for Dynamic Media URL
+	   const buildAdvanceModifierParams = () => {
+		const params = [];
+		
+		// Add rotation parameter
+		if (rotate) {
+		  params.push(`rotate=${encodeURIComponent(rotate)}`);
+		}
+		
+		// Add flip parameter
+		if (flip) {
+		  params.push(`flip=${encodeURIComponent(flip.toLowerCase())}`);
+		}
+		
+		// Add crop parameter
+		if (cropValue) {
+		  params.push(`crop=${encodeURIComponent(cropValue.toLowerCase())}`);
+		}
+		
+		// Handle preset parameter with special logic for 'border' preset
+		if (preset) {
+		  const presetLower = preset.toLowerCase();
+		  
+		  if (presetLower === 'border') {
+			// Border preset can include extend and background-color
+			if (extend && backgroundcolor) {
+			  const bgColor = backgroundcolor.replace('#', '');
+			  params.push(`extend=${encodeURIComponent(extend)}`);
+			  params.push(`background-color=rgb,${encodeURIComponent(bgColor)}`);
+			} else if (extend) {
+			  params.push(`extend=${encodeURIComponent(extend)}`);
+			}
+		  }
+		  else if (presetLower === 'grayscale') {
+			  params.push(`saturation=-100`);
+		  } else {
+			// Regular preset
+			params.push(`preset=${encodeURIComponent(preset)}`);
+		  }
+		}
+		// Join all parameters with '&' and prepend '&' if there are any
+		return params.length > 0 ? `&${params.join('&')}` : '';
+	  };
+	  
+	  const advanceModifierParams = buildAdvanceModifierParams();
+	/*
 	  const advanceModifierParams =
 	  (rotate ? `&rotate=${encodeURIComponent(rotate)}` : '') +
 	  (flip ? `&flip=${encodeURIComponent(flip.toLowerCase())}` : '') +
@@ -598,7 +645,8 @@ import {
 		: preset 
 		  ? `&preset=${encodeURIComponent(preset)}`
 		  : '');
-  
+  	*/
+	
 	  const originalUrl = new URL(href);
 	  const hasQueryParams = originalUrl.toString().includes('?');
 	  const paramSeparator = hasQueryParams ? '&' : '?';
