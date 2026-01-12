@@ -134,11 +134,7 @@
               {
                 "name": "Grayscale",
                 "value": "grayscale"
-              },
-              {
-                "name": "PNG – Enhanced Clarity",
-                "value": "Always_Use_a_Preset"
-              }              
+              }           
             ]
         },
         {
