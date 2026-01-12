@@ -650,7 +650,7 @@ import {
 	  const originalUrl = new URL(href);
 	  const hasQueryParams = originalUrl.toString().includes('?');
 	  const paramSeparator = hasQueryParams ? '&' : '?';
-	  const baseParams = `${paramSeparator}quality=85&preferwebp=true${advanceModifierParams}`;
+	  const baseParams = `${paramSeparator}quality=85${advanceModifierParams}`;
 	  const pic = document.createElement('picture');
   
   
