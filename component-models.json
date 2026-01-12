@@ -128,13 +128,17 @@
                 "value": ""
               },
               {
-                "name": "PNG – Enhanced Clarity",
-                "value": "Always_Use_a_Preset"
-              },
-              {
                 "name": "Border with Color",
                 "value": "border"
-              }
+              },
+              {
+                "name": "Grayscale",
+                "value": "grayscale"
+              },
+              {
+                "name": "PNG – Enhanced Clarity",
+                "value": "Always_Use_a_Preset"
+              }              
             ]
         },
         {
