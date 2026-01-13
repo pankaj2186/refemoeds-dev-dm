@@ -99,6 +99,7 @@
             "component": "custom-asset-namespace:custom-asset",
             "name": "image",
             "label": "Image",
+            "required": true,
             "configUrl": "/content/dam/config/image.config.json",
             "valueType": "string"
         },
@@ -260,6 +261,7 @@
         {
           "component": "custom-asset-namespace:custom-asset",
           "name": "video",
+          "required": true,
           "label": "Video",
           "configUrl": "/content/dam/config/video.config.json",
           "valueType": "string"
