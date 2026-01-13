@@ -548,7 +548,7 @@ import {
 	  pic.appendChild(img);
 	  dmOpenApiDiv.appendChild(pic);
 	}
-
+	/*
 	const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
 
 	for (const block of allBlocks) {
@@ -560,6 +560,7 @@ import {
 			});
 		}
 	}
+	*/
   }
   
   function whatBlockIsThis(element) {
