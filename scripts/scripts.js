@@ -189,7 +189,7 @@ import {
 	decorateSections(main);
 	decorateBlocks(main);
 	decorateDMImages(main);
-	decorateDMVideos(main);
+	//decorateDMVideos(main);
   }
   
   

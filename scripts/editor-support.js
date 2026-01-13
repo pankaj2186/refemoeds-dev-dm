@@ -59,7 +59,7 @@ async function applyChanges(event) {
         decorateRichtext(newBlock);
         // Decorate DM OpenAPI images and videos for live preview in Universal Editor
         await decorateDMImages(newBlock);
-        await decorateDMVideos(newBlock);
+        //await decorateDMVideos(newBlock);
         await loadBlock(newBlock);
         block.remove();
         newBlock.style.display = null;
@@ -81,7 +81,7 @@ async function applyChanges(event) {
           decorateBlocks(parentElement);
           // Decorate DM OpenAPI images and videos for live preview in Universal Editor
           await decorateDMImages(newSection);
-          await decorateDMVideos(newSection);
+          //await decorateDMVideos(newSection);
           await loadSections(parentElement);
           element.remove();
           newSection.style.display = null;
