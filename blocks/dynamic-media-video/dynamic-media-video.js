@@ -55,6 +55,21 @@ export default async function decorate(block) {
     if (dashUrl) params.sources.DASH = dashUrl;
     if (hlsUrl) params.sources.HLS = hlsUrl;
 
+    //if (autoplay) {
+      params.autoplay = '1';
+    //}
+    //if (loop) {
+      params.loop = '1';
+    //}
+    //if (muted) {
+      params.muted = '1';  // or params.playback = 'muted';
+    //}
+
+    // Controls behavior depends on the viewer version; simplest pattern:
+    //if (!showControls) {
+      params.hidecontrolbar = '1';
+    //}
+
     // Instantiate viewer
     const s7videoviewer = new window.dmviewers.VideoViewer({
       containerId: block.id,
