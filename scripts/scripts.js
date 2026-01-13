@@ -302,7 +302,8 @@ import {
 	loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
 	loadFonts();
   }
-  function isDMOpenAPIUrl(src) {
+
+  export function isDMOpenAPIUrl(src) {
 	return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
   }
   
