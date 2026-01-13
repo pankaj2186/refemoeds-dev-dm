@@ -338,18 +338,6 @@ import {
    */
   export async function decorateDMImages(main) {
 	
-	const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
-
-	for (const block of allBlocks) {
-	  	const links = block.querySelectorAll('a[href]');
-		// If no links exist, hide everything else within the block
-		if (links.length === 0) {
-			Array.from(block.children).forEach((child) => {
-				child.style.display = 'none';
-			});
-		}
-	}
-
 	const links = Array.from(main.querySelectorAll('a[href]'));
 
 	for (const a of links) {
@@ -559,6 +547,18 @@ import {
   
 	  pic.appendChild(img);
 	  dmOpenApiDiv.appendChild(pic);
+	}
+
+	const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
+
+	for (const block of allBlocks) {
+	  	const links = block.querySelectorAll('a[href]');
+		// If no links exist, hide everything else within the block
+		if (links.length === 0) {
+			Array.from(block.children).forEach((child) => {
+				child.style.display = 'none';
+			});
+		}
 	}
   }
   
