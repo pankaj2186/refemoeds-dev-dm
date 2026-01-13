@@ -6,39 +6,62 @@ let dmViewerPromise;
  */
 export default async function decorate(block) {
  
-  <div class="dm-video-player"></div>
-
   if (!window.dmviewers || !window.dmviewers.VideoViewer) {
     console.error('DM VideoViewer not available on window.dmviewers');
     return;
   }
-  /*
-  // Extract data from the block HTML
-  const poster = block.querySelector('.dm-video-poster')?.textContent?.trim();
-  const dash = block.querySelector('.dm-video-dash')?.textContent?.trim();
-  const hls = block.querySelector('.dm-video-hls')?.textContent?.trim();
 
-  // Create a container for the DM viewer
-  const playerContainer = block.querySelector('.dm-video-player') || document.createElement('div');
-  playerContainer.id = playerContainer.id || `dm-video-${crypto.randomUUID()}`;
-  if (!playerContainer.isConnected) {
-    block.appendChild(playerContainer);
+  const videolinks = block.querySelectorAll('a[href]');
+  //https://delivery-p153659-e1620914.adobeaemcloud.com/adobe/assets/urn:aaid:aem:20bd71c3-a5a1-4b9e-833e-42e5cd028c3c/renditions/original/as/SampleVideo1mb.mp4?assetname=SampleVideo1mb.mp4
+
+  if(videolinks.length != 0){
+    let videoUrl = videolinks[0].href;
+
+    const urnPattern = /(\/adobe\/assets\/urn:[^\/]+)/i;
+    const match = videoUrl.match(urnPattern);
+
+    if (!match) {
+      console.error('Invalid Dynamic Media video URL format');
+      return null;
+    }
+
+    // Extract the base URL (protocol + hostname)
+    const videoURLObj = new URL(videoUrl);
+    const baseUrl = `${videoURLObj.protocol}//${videoURLObj.hostname}`;
+
+    // Extract the asset ID path (e.g., /adobe/assets/urn:aaid:aem:20bd71c3-a5a1-4b9e-833e-42e5cd028c3c)
+    const assetIdPath = match[1];
+
+    // Construct the URLs
+    const posterImageUrl = `${baseUrl}${assetIdPath}/as/thumbnail.jpeg?preferwebp=true`;
+    const dashUrl = `${baseUrl}${assetIdPath}/manifest.mpd`;
+    const hlsUrl = `${baseUrl}${assetIdPath}/manifest.m3u8`;
+
+    // Create a container for the DM viewer
+    const playerContainer = block.querySelector('.dynamic-media-video');
+    Array.from(block.children).forEach((child) => {
+				child.style.display = 'none';
+			});
+      
+    playerContainer.id = `dm-video-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+
+    const params = {
+      posterimage: posterImageUrl,
+      sources: {},
+    };
+
+    if (dash) params.sources.DASH = dash;
+    if (hls) params.sources.HLS = hls;
+
+    // Instantiate viewer
+    const s7videoviewer = new window.dmviewers.VideoViewer({
+      containerId: playerContainer.id,
+      params,
+    });
+    s7videoviewer.init();
+  } else{
+     Array.from(block.children).forEach((child) => {
+      child.style.display = 'none';
+    });
   }
-
-  const params = {
-    posterimage: poster || '',
-    sources: {},
-  };
-
-  if (dash) params.sources.DASH = dash;
-  if (hls) params.sources.HLS = hls;
-
-  // Instantiate viewer
-  const s7videoviewer = new window.dmviewers.VideoViewer({
-    containerId: playerContainer.id,
-    params,
-  });
-
-  s7videoviewer.init();
-  */
 }
