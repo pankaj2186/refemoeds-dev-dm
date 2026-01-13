@@ -52,8 +52,8 @@ export default async function decorate(block) {
       sources: {},
     };
 
-    if (dash) params.sources.DASH = dash;
-    if (hls) params.sources.HLS = hls;
+    if (dash) params.sources.DASH = dashUrl;
+    if (hls) params.sources.HLS = hlsUrl;
 
     // Instantiate viewer
     const s7videoviewer = new window.dmviewers.VideoViewer({
