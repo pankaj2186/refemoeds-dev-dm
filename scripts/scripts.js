@@ -517,8 +517,7 @@ import {
   
 	  const isGifFile = hrefLower.endsWith('.gif');
 	  const containsOriginal = href.includes('/original/');
-	  const dmOpenApiDiv =
-		a.closest('.dm-openapi') || a.closest('.dynamic-media-image');
+	  const dmOpenApiDiv = a.closest('.dm-openapi') || a.closest('.dynamic-media-image');
   
 	  if (!dmOpenApiDiv) continue;
   

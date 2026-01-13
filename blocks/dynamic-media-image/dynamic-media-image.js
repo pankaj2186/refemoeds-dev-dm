@@ -3,7 +3,7 @@
  */
 export default function decorate(block) {
   //console.log("dynamic-media-image :"+block);
-
+/*
   const links = block.querySelectorAll('a[href]');
   // If no links exist, hide everything else within the block
   if (links.length === 0) {
@@ -12,4 +12,5 @@ export default function decorate(block) {
       child.style.display = 'none';
     });
   }
+  */
 }
