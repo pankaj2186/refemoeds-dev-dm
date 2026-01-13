@@ -38,12 +38,14 @@ export default async function decorate(block) {
     const hlsUrl = `${baseUrl}${assetIdPath}/manifest.m3u8`;
 
     // Create a container for the DM viewer
-    const playerContainer = block.querySelector('.dynamic-media-video');
+   // const playerContainer = block.querySelector('.dynamic-media-video');
+
+
     Array.from(block.children).forEach((child) => {
 				child.style.display = 'none';
 			});
       
-    playerContainer.id = `dm-video-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+    block.id = `dm-video-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
     const params = {
       posterimage: posterImageUrl,
@@ -55,7 +57,7 @@ export default async function decorate(block) {
 
     // Instantiate viewer
     const s7videoviewer = new window.dmviewers.VideoViewer({
-      containerId: playerContainer.id,
+      containerId: block.id,
       params,
     });
     s7videoviewer.init();
