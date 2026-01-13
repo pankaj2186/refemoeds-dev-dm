@@ -336,7 +336,7 @@ import {
    * @param {HTMLElement} main - The main container element that includes the links to be processed.
    */
   export async function decorateDMImages(main) {
-	/*
+	
 	const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
 
 	for (const block of allBlocks) {
@@ -347,7 +347,7 @@ import {
 				child.style.display = 'none';
 			});
 		}
-	}*/
+	}
 
 	const links = Array.from(main.querySelectorAll('a[href]'));
 
