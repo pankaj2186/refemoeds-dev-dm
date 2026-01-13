@@ -41,10 +41,7 @@ export default async function decorate(block) {
    // const playerContainer = block.querySelector('.dynamic-media-video');
 
 
-    Array.from(block.children).forEach((child) => {
-				child.style.display = 'none';
-			});
-      
+    
     block.id = `dm-video-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
     const params = {
@@ -55,20 +52,55 @@ export default async function decorate(block) {
     if (dashUrl) params.sources.DASH = dashUrl;
     if (hlsUrl) params.sources.HLS = hlsUrl;
 
-    //if (autoplay) {
+    let autoplay = '';
+	  let loop = '';
+	  let muted = '';
+	  let showControls = '';
+
+    const siblings = [];
+    let current = block.nextElementSibling;
+
+    // Collect up to 4 siblings (preset, rotate, flip, crop) in order
+    while (current && siblings.length < 7) {
+      siblings.push(current);
+      current = current.nextElementSibling;
+    }
+
+    // Helper to safely consume a sibling element's trimmed text and remove it
+    const consumeSiblingText = (el) => {
+      if (!el) return '';
+      const text = el.textContent?.trim() || '';
+      if (text) el.remove();
+      return text;
+    };
+
+    // Order matters: preset, rotate, flip, crop
+    if (siblings.length > 0) {
+      autoplay = consumeSiblingText(siblings.shift()) || false;
+      loop = consumeSiblingText(siblings.shift());
+      muted = consumeSiblingText(siblings.shift());
+      showControls = consumeSiblingText(siblings.shift());
+    }
+		
+
+    Array.from(block.children).forEach((child) => {
+				child.style.display = 'none';
+		});
+
+    if (autoplay) {
       params.autoplay = '1';
-    //}
-    //if (loop) {
+    }
+    if (loop) {
       params.loop = '1';
-    //}
-    //if (muted) {
+    }
+    if (muted) {
       params.muted = '1';  // or params.playback = 'muted';
-    //}
+    }
 
     // Controls behavior depends on the viewer version; simplest pattern:
-    //if (!showControls) {
+    if (!showControls) {
       params.hidecontrolbar = '1';
-    //}
+    }
 
     // Instantiate viewer
     const s7videoviewer = new window.dmviewers.VideoViewer({
