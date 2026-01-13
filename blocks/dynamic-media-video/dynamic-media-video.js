@@ -66,9 +66,9 @@ export default async function decorate(block) {
       return pElement?.textContent?.trim() || '';
     };
 
-    autoplay = getTextFromChild(1)?.textContent?.trim().toLowerCase() === 'true' ? true : false ;
-    loop = getTextFromChild(2)?.textContent?.trim().toLowerCase() === 'true' ? true : false;
-    muted = getTextFromChild(3)?.textContent?.trim().toLowerCase() === 'true' ? true : false;
+    autoplay = getTextFromChild(1)?.toLowerCase() === 'true' ? true : false ;
+    loop = getTextFromChild(2)?.toLowerCase() === 'true' ? true : false;
+    muted = getTextFromChild(3)?.toLowerCase() === 'true' ? true : false;
 
     Array.from(block.children).forEach((child) => {
 				child.style.display = 'none';
