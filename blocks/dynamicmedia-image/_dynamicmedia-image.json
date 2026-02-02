@@ -157,6 +157,12 @@
           "name": "dm_alttext",
           "label": "Alt Text",
           "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "advance_parameters",
+          "label": "Advance Parameters",
+          "valueType": "string"
         }
       ]
     }
