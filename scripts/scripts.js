@@ -29,6 +29,19 @@ import {
   } from './utils.js';
   
   
+import {
+	runExperimentation,
+	showExperimentationRail,
+} from './experiment-load.js';
+const experimentationConfig = {
+	prodHost: 'www.example.com',
+	audiences: {
+		mobile: () => window.innerWidth < 600,
+		desktop: () => window.innerWidth >= 600,
+		// define your custom audiences here as needed
+	},
+};
+
   /**
    * Moves all the attributes from a given elmenet to another given element.
    * @param {Element} from the element to copy attributes from
@@ -222,6 +235,7 @@ import {
   async function loadEager(doc) {
 	setPageLanguage();
 	decorateTemplateAndTheme();
+	await runExperimentation(doc, experimentationConfig);
 	renderWBDataLayer();
 	const main = doc.querySelector('main');
 	if (main) {
@@ -301,6 +315,7 @@ import {
   
 	loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
 	loadFonts();
+	await showExperimentationRail(doc, experimentationConfig);
   }
 
   export function isDMOpenAPIUrl(src) {
