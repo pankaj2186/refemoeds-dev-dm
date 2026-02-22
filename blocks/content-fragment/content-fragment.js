@@ -41,7 +41,12 @@ export default async function decorate(block) {
 
   block.innerHTML = '';
   const isAuthor = isAuthorEnvironment();
-
+	const requestConfig = {
+      url: `${aemauthorurl}${CONFIG.GRAPHQL_QUERY};path=${contentPath};variation=${variationname}`,
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+	/*
 	// Prepare request configuration based on environment
 	const requestConfig = isAuthor 
   ? {
@@ -60,6 +65,7 @@ export default async function decorate(block) {
       })
     };
 
+	*/
     try {
         // Fetch data
         const response = await fetch(requestConfig.url, {
