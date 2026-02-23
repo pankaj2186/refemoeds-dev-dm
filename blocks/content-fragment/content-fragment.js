@@ -42,7 +42,7 @@ export default async function decorate(block) {
   block.innerHTML = '';
   const isAuthor = isAuthorEnvironment();
 	const requestConfig = {
-      url: `${aemauthorurl}${CONFIG.GRAPHQL_QUERY};path=${contentPath};variation=${variationname}`,
+      url: `${aemauthorurl}${CONFIG.GRAPHQL_QUERY}#path=${contentPath}#variation=${variationname}`,
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
