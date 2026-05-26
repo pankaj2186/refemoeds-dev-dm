@@ -262,8 +262,8 @@
         {
           "component": "boolean",
           "name": "showInfoIcon",
-          "label": "Show Info Icon",
-          "description": "Show an info icon on the image that links to the Snapshot tool for previewing image transformations",
+          "label": "DM Playground",
+          "description": "Show an icon on the image(top right) that opens selected image in the DM Playground tool(Snapshot) for previewing image transformations",
           "value": true,
           "valueType": "boolean"
         }
