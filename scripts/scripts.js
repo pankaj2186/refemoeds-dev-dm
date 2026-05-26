@@ -566,6 +566,41 @@ const experimentationConfig = {
 	  
 		  pic.appendChild(img);
 		  dmOpenApiDiv.appendChild(pic);
+
+			if (showInfoIcon === true || showInfoIcon === 'true') {
+				const urnPattern = /(\/adobe\/assets\/urn:[^\/]+)/i;
+				const urnMatch = href.match(urnPattern);
+				if (urnMatch) {
+				const urlObj = new URL(href);
+				const imageBaseUrl = `${urlObj.protocol}//${urlObj.hostname}${urnMatch[1]}`;
+				const snapshotState = JSON.stringify({
+					imageUrl: imageBaseUrl,
+					serviceMode: 'openapi',
+					params: {},
+					thumbWidth: 600,
+					thumbHeight: 600,
+				});
+				const snapshotUrl = `https://snapshot.scene7.com/?state=${encodeURIComponent(snapshotState)}`;
+		
+				dmOpenApiDiv.style.position = 'relative';
+				dmOpenApiDiv.style.display = 'inline-block';
+		
+				const infoLink = document.createElement('a');
+				infoLink.href = snapshotUrl;
+				infoLink.target = '_blank';
+				infoLink.rel = 'noopener noreferrer';
+				infoLink.className = 'dm-info-icon';
+				infoLink.title = 'Preview image transformations in the Snapshot tool';
+				infoLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="#0265DC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+		
+				const tooltip = document.createElement('span');
+				tooltip.className = 'dm-info-tooltip';
+				tooltip.textContent = 'Open in Snapshot tool to preview image transformations';
+				infoLink.appendChild(tooltip);
+		
+				dmOpenApiDiv.appendChild(infoLink);
+				}
+			}
 		}
 		
 		const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
