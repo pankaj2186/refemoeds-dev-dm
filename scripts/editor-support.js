@@ -378,7 +378,8 @@ const experimentationConfig = {
 			let extend = '';
 			let backgroundcolor = '';
 			let enableSmartCrop = '';
-				let showInfoIcon = '';
+			let advancedParams = '';
+			let showInfoIcon = '';
 		
 			if (blockBeingDecorated) {
 				blockName = Array.from(blockBeingDecorated.classList).find(
@@ -400,7 +401,7 @@ const experimentationConfig = {
 				let current = container.nextElementSibling;
 		
 				// Collect up to 4 siblings (preset, rotate, flip, crop) in order
-					while (current && siblings.length < 8) {
+					while (current && siblings.length < 9) {
 						siblings.push(current);
 						current = current.nextElementSibling;
 				}
@@ -422,6 +423,7 @@ const experimentationConfig = {
 					rotate = consumeSiblingText(siblings.shift());
 					flip = consumeSiblingText(siblings.shift());
 					cropValue = consumeSiblingText(siblings.shift());
+					advancedParams = consumeSiblingText(siblings.shift());
 					showInfoIcon = consumeSiblingText(siblings.shift());
 				}
 				}
