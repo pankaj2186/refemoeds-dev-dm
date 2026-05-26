@@ -52,13 +52,7 @@ export default async function decorate(block) {
     if (dashUrl) params.sources.DASH = dashUrl;
     if (hlsUrl) params.sources.HLS = hlsUrl;
 
-    let autoplay = '';
-	  let loop = '';
-	  let muted = '';
-	  let showControls = '';
-    
     const children = Array.from(block.children);
-    // Helper function to safely extract text content from a child div
     const getTextFromChild = (index) => {
       const childDiv = children[index];
       if (!childDiv) return '';
@@ -66,9 +60,14 @@ export default async function decorate(block) {
       return pElement?.textContent?.trim() || '';
     };
 
-    autoplay = getTextFromChild(1)?.toLowerCase() === 'true' ? true : false ;
-    loop = getTextFromChild(2)?.toLowerCase() === 'true' ? true : false;
-    muted = getTextFromChild(3)?.toLowerCase() === 'true' ? true : false;
+    const enableSmartCrop = getTextFromChild(1)?.toLowerCase() === 'true';
+    if (enableSmartCrop) {
+      params.mode = 'smartcrop';
+    }
+
+    const autoplay = getTextFromChild(3)?.toLowerCase() === 'true';
+    const loop = getTextFromChild(4)?.toLowerCase() === 'true';
+    const muted = getTextFromChild(5)?.toLowerCase() === 'true';
 
     Array.from(block.children).forEach((child) => {
 				child.style.display = 'none';
