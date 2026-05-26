@@ -590,6 +590,7 @@ const experimentationConfig = {
 				infoLink.target = '_blank';
 				infoLink.rel = 'noopener noreferrer';
 				infoLink.className = 'dm-info-icon';
+				infoLink.title = 'Open in Snapshot tool to preview image transformations';
 				infoLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none"><polygon points="8,5 19,12 8,19"/></svg>`;
 				const tooltip = document.createElement('span');
 				tooltip.className = 'dm-info-tooltip';
