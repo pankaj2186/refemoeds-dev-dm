@@ -379,6 +379,7 @@ const experimentationConfig = {
 		  let backgroundcolor = '';
 		  let advanceManualParam = '';
 		  let enableSmartCrop = '';
+			let showInfoIcon = '';
 	  
 		  if (blockBeingDecorated) {
 			blockName = Array.from(blockBeingDecorated.classList).find(
