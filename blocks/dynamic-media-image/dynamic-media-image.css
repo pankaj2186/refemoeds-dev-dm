@@ -13,3 +13,54 @@
 .dynamicmedia-image-wrapper{
     text-align:center;
 }
+
+.dm-info-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+}
+
+.dm-info-icon:hover {
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dm-info-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tooltip on hover */
+.dm-info-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: #333;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.dm-info-icon:hover .dm-info-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
