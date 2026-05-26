@@ -13,3 +13,55 @@
 .dynamicmedia-image-wrapper{
     text-align:center;
 }
+
+/* Snapshot play icon overlay */
+.dm-info-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    box-shadow: none;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+
+.dm-info-icon:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.dm-info-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Tooltip on hover */
+.dm-info-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 42px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.3;
+    padding: 5px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.dm-info-icon:hover .dm-info-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
