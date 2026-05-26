@@ -41,7 +41,7 @@
     padding-left: 3px;
     margin: 0;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .dynamic-media-image a.dm-info-icon:hover,
