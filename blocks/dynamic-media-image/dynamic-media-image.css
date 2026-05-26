@@ -38,7 +38,10 @@
     font-size: 0;
     line-height: 0;
     padding: 0;
+    padding-left: 3px;
     margin: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .dynamic-media-image a.dm-info-icon:hover,
@@ -49,10 +52,20 @@
     color: transparent;
 }
 
+/* Kill any page-level ::before / ::after pseudo-elements (e.g. orange >) */
+.dynamic-media-image a.dm-info-icon::before,
+.dynamic-media-image a.dm-info-icon::after,
+.dm-openapi a.dm-info-icon::before,
+.dm-openapi a.dm-info-icon::after {
+    content: none;
+    display: none;
+}
+
 .dynamic-media-image a.dm-info-icon svg,
 .dm-openapi a.dm-info-icon svg {
     width: 22px;
     height: 22px;
+    flex-shrink: 0;
 }
 
 /* Tooltip on hover */
