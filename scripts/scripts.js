@@ -563,19 +563,19 @@ const experimentationConfig = {
 	  pic.appendChild(img);
 	  dmOpenApiDiv.appendChild(pic);
 	}
-	/*
+	
 	const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
 
 	for (const block of allBlocks) {
-	  	const links = block.querySelectorAll('a[href]');
-		// If no links exist, hide everything else within the block
+		const links = block.querySelectorAll('a[href]');
+		// If no image is authored, hide all children to prevent raw property values
+		// like "false", "na" from rendering as visible text
 		if (links.length === 0) {
 			Array.from(block.children).forEach((child) => {
 				child.style.display = 'none';
 			});
 		}
 	}
-	*/
   }
   
   function whatBlockIsThis(element) {
