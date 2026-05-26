@@ -569,16 +569,21 @@ const experimentationConfig = {
 		}
 		
 		const allBlocks = Array.from(main.querySelectorAll('.dm-openapi, .dynamic-media-image'));
-	
+
 		for (const block of allBlocks) {
-			const links = block.querySelectorAll('a[href]');
-			// If no image is authored, hide all children to prevent raw property values
-			// like "false", "na" from rendering as visible text
-			if (links.length === 0) {
-				Array.from(block.children).forEach((child) => {
-					child.style.display = 'none';
-				});
-			}
+				const links = block.querySelectorAll('a[href]');
+				// If no image is authored, hide all children to prevent raw property values
+				// like "false", "na" from rendering as visible text
+				if (links.length === 0) {
+						const pictures = block.querySelectorAll('picture');
+						// Hide children only if no image was authored (no links)
+						// and block wasn't already processed (no picture element)
+						if (links.length === 0 && pictures.length === 0) {
+							Array.from(block.children).forEach((child) => {
+								child.style.display = 'none';
+							});
+						}
+				}
 		}
   }
   
