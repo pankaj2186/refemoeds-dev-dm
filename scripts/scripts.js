@@ -378,7 +378,7 @@ const experimentationConfig = {
 	  let extend = '';
 	  let backgroundcolor = '';
 	  let enableSmartCrop = '';
-	  let showInfoIcon = '';
+	 	let showInfoIcon = '';
   
 	  if (blockBeingDecorated) {
 		blockName = Array.from(blockBeingDecorated.classList).find(
@@ -400,9 +400,9 @@ const experimentationConfig = {
 		  let current = container.nextElementSibling;
   
 		  // Collect up to 4 siblings (preset, rotate, flip, crop) in order
-		  while (current && siblings.length < 7) {
-			siblings.push(current);
-			current = current.nextElementSibling;
+		 	while (current && siblings.length < 8) {
+				siblings.push(current);
+				current = current.nextElementSibling;
 		  }
   
 		  // Helper to safely consume a sibling element's trimmed text and remove it
@@ -605,9 +605,10 @@ const experimentationConfig = {
 
 	for (const block of allBlocks) {
 		const links = block.querySelectorAll('a[href]');
+		const pictures = block.querySelectorAll('picture');
 		// If no image is authored, hide all children to prevent raw property values
 		// like "false", "na" from rendering as visible text
-		if (links.length === 0) {
+		if (links.length === 0 && pictures.length === 0) {
 			const pictures = block.querySelectorAll('picture');
 			// Hide children only if no image was authored (no links)
 			// and block wasn't already processed (no picture element)
@@ -618,17 +619,17 @@ const experimentationConfig = {
 			}
 		}
 	}
-  }
+}
   
   function whatBlockIsThis(element) {
-	let currentElement = element;
-  
-	while (currentElement.parentElement) {
-	  if (currentElement.parentElement.classList.contains('block')) return currentElement.parentElement;
-	  currentElement = currentElement.parentElement;
-	  if (currentElement.classList.length > 0) return currentElement.classList[0];
-	}
-	return null;
+		let currentElement = element;
+	  
+		while (currentElement.parentElement) {
+		  if (currentElement.parentElement.classList.contains('block')) return currentElement.parentElement;
+		  currentElement = currentElement.parentElement;
+		  if (currentElement.classList.length > 0) return currentElement.classList[0];
+		}
+		return null;
   }
   
   /**
