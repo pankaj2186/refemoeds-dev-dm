@@ -474,6 +474,16 @@ const experimentationConfig = {
 				params.push(`preset=${encodeURIComponent(preset)}`);
 			  }
 			}
+
+			// Append advance_parameters (author-provided custom params)
+			if (advanceManualParam) {
+			  // Strip leading '&' to avoid double '&&' when joining
+			  const sanitized = advanceManualParam.replace(/^&+/, '');
+			  if (sanitized) {
+				params.push(sanitized);
+			  }
+			}
+			
 			// Join all parameters with '&' and prepend '&' if there are any
 			return params.length > 0 ? `&${params.join('&')}` : '';
 		  };
