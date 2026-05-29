@@ -1,5 +1,3 @@
-import { getMetadata } from '../../scripts/aem.js';
-import { isAuthorEnvironment, moveInstrumentation } from '../../scripts/scripts.js';
 
 /* Video file extensions recognised for auto-detection */
 const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.mov', '.ogg', '.m4v', '.avi'];
@@ -92,7 +90,7 @@ export default function decorate(block) {
   // --- Read configuration values ---
   const enableUnderline = underlineDiv?.querySelector('div')?.textContent?.trim() || 'true';
   const layoutStyle = layoutDiv?.querySelector('div')?.textContent?.trim() || 'overlay';
-  const ctaStyle = ctaDiv?.querySelector('div')?.textContent?.trim() || 'default';
+  const ctaStyle = ctaDiv?.querySelector('div')?.textContent?.trim() || 'button';
   const backgroundStyle = bgDiv?.querySelector('div')?.textContent?.trim() || 'default';
 
   // --- Apply layout & theme classes ---
@@ -104,11 +102,6 @@ export default function decorate(block) {
   const buttonContainer = block.querySelector('p.button-container');
   if (buttonContainer) {
     buttonContainer.classList.add(`cta-${ctaStyle}`);
-  }
-
-  const ctaStyleParagraph = block.querySelector('p[data-aue-prop="ctastyle"]');
-  if (ctaStyleParagraph) {
-    ctaStyleParagraph.style.display = 'none';
   }
 
   // --- Mark text div with a stable class so CSS targets it regardless of DOM position ---
