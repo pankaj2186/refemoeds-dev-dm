@@ -13,6 +13,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Ensure all direct child divs stay within the hero bounds */
+.hero > div {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* --------------------------
@@ -216,8 +224,9 @@ video.hero-video-bg {
 
 .hero.image-background-text-left > div {
   text-align: left;
-  max-width: 600px;
+  max-width: min(600px, 100%);
   margin: 0;
+  box-sizing: border-box;
 }
 
 /* Image Background Text Right - Text overlaid on background image, right-aligned */
@@ -230,8 +239,9 @@ video.hero-video-bg {
 
 .hero.image-background-text-right > div {
   text-align: left;
-  max-width: 600px;
+  max-width: min(600px, 100%);
   margin: 0;
+  box-sizing: border-box;
 }
 
 .hero.image-left picture,
@@ -377,13 +387,18 @@ picture {
 
 @media (width < 1024px) {
   .hero { min-height: 650px; }
-  
+
   .hero.image-background-text-left {
     padding: 50px 30px;
   }
-  
+
   .hero.image-background-text-right {
     padding: 50px 30px;
+  }
+
+  .hero.image-background-text-left > div,
+  .hero.image-background-text-right > div {
+    max-width: min(600px, calc(100% - 20px));
   }
 }
 
@@ -447,10 +462,14 @@ picture {
   
   /* Mobile adjustments for image-background-text-left */
   .hero.image-background-text-left {
-    padding: 40px 20px;
+    padding: 40px 16px;
     text-align: center;
   }
-  
+
+  .hero.image-background-text-left > div {
+    max-width: 100%;
+  }
+
   .hero.image-background-text-left h1,
   .hero.image-background-text-left h2,
   .hero.image-background-text-left h3,
@@ -460,17 +479,21 @@ picture {
   .hero.image-background-text-left p {
     text-align: center;
   }
-  
+
   .hero.image-background-text-left .button-container {
     text-align: center;
   }
-  
+
   /* Mobile adjustments for image-background-text-right */
   .hero.image-background-text-right {
-    padding: 40px 20px;
+    padding: 40px 16px;
     text-align: center;
   }
-  
+
+  .hero.image-background-text-right > div {
+    max-width: 100%;
+  }
+
   .hero.image-background-text-right h1,
   .hero.image-background-text-right h2,
   .hero.image-background-text-right h3,
@@ -479,12 +502,40 @@ picture {
   .hero.image-background-text-right h6,
   .hero.image-background-text-right p,
   .hero.image-background-text-right .button-container {
-    text-align: left;
+    text-align: center;
   }
-  
+
   .hero.image-background-text-right .button-container {
     text-align: center;
   }
+
+  /* Default overlay — constrain text on mobile */
+  .hero.block.overlay div:nth-child(2) {
+    max-width: calc(100% - 32px);
+    padding: 16px;
+  }
+
+  /* Side-by-side layouts — text panel goes full width on mobile */
+  .hero.image-left > div:nth-child(2),
+  .hero.image-right > div:nth-child(2) {
+    flex: 1 1 auto;
+    padding: 24px 16px;
+  }
+}
+
+@media (width < 480px) {
+  .hero {
+    min-height: 400px;
+    padding: 24px 12px;
+  }
+
+  .hero.image-background-text-left,
+  .hero.image-background-text-right {
+    padding: 24px 12px;
+  }
+
+  .hero h1 { font-size: 1.6rem; }
+  .hero h2 { font-size: 1.3rem; }
 }
 
 /* --------------------------
@@ -531,9 +582,16 @@ picture {
   border-color: var(--dark-color);
 }
 
-.hero.block.overlay div:nth-child(2),.hero.image-background-text-left div:nth-child(2),.hero.image-background-text-right div:nth-child(2) {
+/* Overlay text box — must stay within the hero on all screens */
+.hero.block.overlay div:nth-child(2),
+.hero.image-background-text-left div:nth-child(2),
+.hero.image-background-text-right div:nth-child(2) {
   padding: 20px;
   background: rgb(0 0 0 / 50%);
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /*button theme hero specific*/

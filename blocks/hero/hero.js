@@ -108,11 +108,28 @@ export default function decorate(block) {
       if (isBackgroundLayout) {
         // Absolute-positioned behind the text overlay
         block.prepend(video);
+        // Hide the original asset div (contains the raw link text)
+        assetDiv.style.display = 'none';
       } else {
         // In-flow — replaces the image slot
         assetDiv.innerHTML = '';
         assetDiv.appendChild(video);
       }
+    }
+  }
+
+  // --- Hide the text overlay div if it has no meaningful authored content ---
+  const textDiv = block.querySelector(':scope > div:nth-child(2)');
+  if (textDiv) {
+    // Check for real content: headings, paragraphs with text, buttons, or links
+    const hasHeading = textDiv.querySelector('h1, h2, h3, h4, h5, h6');
+    const hasButton = textDiv.querySelector('.button-container');
+    const hasText = [...textDiv.querySelectorAll('p')].some(
+      (p) => !p.classList.contains('button-container') && p.textContent.trim().length > 0,
+    );
+
+    if (!hasHeading && !hasButton && !hasText) {
+      textDiv.style.display = 'none';
     }
   }
 
