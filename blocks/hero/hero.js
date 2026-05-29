@@ -98,12 +98,14 @@ export default function decorate(block) {
   if (backgroundStyle) block.classList.add(backgroundStyle);
   if (enableUnderline.toLowerCase() === 'false') block.classList.add('removeunderline');
 
+  /*
   // --- CTA styling ---
   const buttonContainer = block.querySelector('p.button-container');
   if (buttonContainer) {
     buttonContainer.classList.add(`cta-${ctaStyle}`);
   }
-
+  */
+ 
   // --- Mark text div with a stable class so CSS targets it regardless of DOM position ---
   if (textDiv) textDiv.classList.add('hero-text');
 
@@ -140,6 +142,15 @@ export default function decorate(block) {
       assetDiv.innerHTML = '';
       assetDiv.appendChild(video);
     }
+  }
+
+  // --- CTA styling ---
+  // Scoped to textDiv only (not the whole block) and runs after removeVideoLinks
+  // so video-URL paragraphs are already gone and can't be mistaken for CTAs.
+  if (textDiv) {
+    textDiv.querySelectorAll('p.button-container').forEach((p) => {
+      p.classList.add(`cta-${ctaStyle}`);
+    });
   }
 
   // --- Hide the asset div if it's empty (video link removed, or no asset authored) ---
