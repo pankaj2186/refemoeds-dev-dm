@@ -6,11 +6,6 @@ const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.mov', '.ogg', '.m4v', '.avi'];
 
 /**
  * Check whether a given <a> element points to a video file.
- * Works with both media-bus URLs (./media_<hash>.mp4) and
- * DM delivery URLs (…/renditions/original/as/file.mp4?assetname=file.mp4).
- *
- * @param {HTMLAnchorElement} link
- * @returns {boolean}
  */
 function isVideoLink(link) {
   if (!link || !link.href) return false;
@@ -29,11 +24,6 @@ function isVideoLink(link) {
 
 /**
  * Find the first video link anywhere inside the block.
- * The reference field can place the <a> in div:nth-child(1) or
- * div:nth-child(2) depending on how UE serialises the content.
- *
- * @param {Element} block
- * @returns {HTMLAnchorElement|null}
  */
 function findVideoLink(block) {
   const links = block.querySelectorAll('a[href]');
@@ -46,15 +36,12 @@ function findVideoLink(block) {
 /**
  * Remove every video-URL <a> from the block DOM.
  * Also removes the parent <p> if it becomes empty after the link is removed.
- *
- * @param {Element} block
  */
 function removeVideoLinks(block) {
   block.querySelectorAll('a[href]').forEach((link) => {
     if (isVideoLink(link)) {
       const parent = link.parentElement;
       link.remove();
-      // If the wrapping <p> is now empty, remove it too
       if (parent && parent.tagName === 'P' && parent.textContent.trim() === '') {
         parent.remove();
       }
@@ -63,11 +50,7 @@ function removeVideoLinks(block) {
 }
 
 /**
- * Check whether a div has meaningful authored content
- * (headings, paragraphs with real text, or button containers).
- *
- * @param {Element} div
- * @returns {boolean}
+ * Check whether a div has meaningful authored content.
  */
 function hasMeaningfulContent(div) {
   if (!div) return false;
@@ -96,11 +79,21 @@ function hasMeaningfulContent(div) {
  * @param {Element} block
  */
 export default function decorate(block) {
-  // --- Read configuration from authored DOM children ---
-  const enableUnderline = block.querySelector(':scope div:nth-child(3) > div')?.textContent?.trim() || 'true';
-  const layoutStyle = block.querySelector(':scope div:nth-child(4) > div')?.textContent?.trim() || 'overlay';
-  const ctaStyle = block.querySelector(':scope div:nth-child(5) > div')?.textContent?.trim() || 'default';
-  const backgroundStyle = block.querySelector(':scope div:nth-child(6) > div')?.textContent?.trim() || 'default';
+  // --- Capture all direct child divs BEFORE any DOM mutations ---
+  // This gives us stable references regardless of prepend/remove operations.
+  const childDivs = [...block.querySelectorAll(':scope > div')];
+  const assetDiv = childDivs[0]; // div 1: image/video asset + alt
+  const textDiv = childDivs[1]; // div 2: richtext (headings, paragraphs, CTA)
+  const underlineDiv = childDivs[2]; // div 3: enableunderline
+  const layoutDiv = childDivs[3]; // div 4: herolayout
+  const ctaDiv = childDivs[4]; // div 5: ctastyle
+  const bgDiv = childDivs[5]; // div 6: backgroundstyle
+
+  // --- Read configuration values ---
+  const enableUnderline = underlineDiv?.querySelector('div')?.textContent?.trim() || 'true';
+  const layoutStyle = layoutDiv?.querySelector('div')?.textContent?.trim() || 'overlay';
+  const ctaStyle = ctaDiv?.querySelector('div')?.textContent?.trim() || 'default';
+  const backgroundStyle = bgDiv?.querySelector('div')?.textContent?.trim() || 'default';
 
   // --- Apply layout & theme classes ---
   if (layoutStyle) block.classList.add(layoutStyle);
@@ -126,8 +119,6 @@ export default function decorate(block) {
     const videoUrl = videoLink.href;
 
     // Remove ALL video-URL links from the DOM before building the player.
-    // The link can appear in div:1 (asset slot) or div:2 (text content)
-    // depending on how UE serialises the reference field.
     removeVideoLinks(block);
 
     // Create a plain HTML5 <video> — no controls, background behaviour
@@ -148,33 +139,25 @@ export default function decorate(block) {
     ].includes(layoutStyle);
 
     if (isBackgroundLayout) {
-      // Absolute-positioned behind the text overlay
       block.prepend(video);
-    } else {
-      // In-flow — place in the first div (asset slot)
-      const assetDiv = block.querySelector(':scope > div:first-child');
-      if (assetDiv) {
-        assetDiv.innerHTML = '';
-        assetDiv.appendChild(video);
-      }
+    } else if (assetDiv) {
+      assetDiv.innerHTML = '';
+      assetDiv.appendChild(video);
     }
   }
 
-  // --- Hide the text overlay div if it has no meaningful authored content ---
-  const textDiv = block.querySelector(':scope > div:nth-child(2)');
-  if (!hasMeaningfulContent(textDiv)) {
-    if (textDiv) textDiv.style.display = 'none';
-  }
-
-  // --- Hide the asset div if it's empty (video was moved out, or no asset) ---
-  const assetDiv = block.querySelector(':scope > div:first-child');
+  // --- Hide the asset div if it's empty (video link removed, or no asset authored) ---
   if (assetDiv && assetDiv.textContent.trim() === '' && !assetDiv.querySelector('picture, video')) {
     assetDiv.style.display = 'none';
   }
 
+  // --- Hide the text overlay div if it has no meaningful authored content ---
+  if (!hasMeaningfulContent(textDiv)) {
+    if (textDiv) textDiv.style.display = 'none';
+  }
+
   // --- Hide configuration-only divs ---
-  [3, 4, 5, 6].forEach((n) => {
-    const div = block.querySelector(`:scope > div:nth-child(${n})`);
+  [underlineDiv, layoutDiv, ctaDiv, bgDiv].forEach((div) => {
     if (div) div.style.display = 'none';
   });
 }
