@@ -603,7 +603,7 @@ const experimentationConfig = {
 				infoLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none"><polygon points="8,5 19,12 8,19"/></svg>`;
 				const tooltip = document.createElement('span');
 				tooltip.className = 'dm-info-tooltip';
-				tooltip.textContent = 'Open in Snapshot tool to preview image transformations';
+				tooltip.textContent = 'Explore more image transformations in Snapshot tool';
 				infoLink.appendChild(tooltip);
 		
 				dmOpenApiDiv.appendChild(infoLink);
