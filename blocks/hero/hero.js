@@ -111,6 +111,9 @@ export default function decorate(block) {
     ctaStyleParagraph.style.display = 'none';
   }
 
+  // --- Mark text div with a stable class so CSS targets it regardless of DOM position ---
+  if (textDiv) textDiv.classList.add('hero-text');
+
   // --- Auto-detect video from any <a> in the block ---
   const videoLink = findVideoLink(block);
 

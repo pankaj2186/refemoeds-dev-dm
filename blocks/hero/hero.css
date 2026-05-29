@@ -510,7 +510,7 @@ picture {
   }
 
   /* Default overlay — constrain text on mobile */
-  .hero.block.overlay div:nth-child(2) {
+  .hero.block.overlay .hero-text {
     max-width: calc(100% - 32px);
     padding: 16px;
   }
@@ -582,10 +582,11 @@ picture {
   border-color: var(--dark-color);
 }
 
-/* Overlay text box — must stay within the hero on all screens */
-.hero.block.overlay div:nth-child(2),
-.hero.image-background-text-left div:nth-child(2),
-.hero.image-background-text-right div:nth-child(2) {
+/* Overlay text box — targets .hero-text class set by JS, so it is always
+   the correct div regardless of whether a <video> was prepended */
+.hero.block.overlay .hero-text,
+.hero.image-background-text-left .hero-text,
+.hero.image-background-text-right .hero-text {
   padding: 20px;
   background: rgb(0 0 0 / 50%);
   box-sizing: border-box;
