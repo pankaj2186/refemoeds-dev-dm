@@ -1,10 +1,3 @@
-Here's the updated CSS. The key changes are:
-
-1. **`position: relative` + `z-index: 1`** on the wrapper and block — fixes the overlap issue
-2. **`overflow: hidden`** on `.dynamic-media-video` — contains the absolutely-positioned video player within the fixed-height container
-3. **Video.js fluid override** — forces the `vjs-fluid` player to fill your fixed-height container instead of fighting it with its own `padding-top` sizing
-
-```css
 .dynamic-media-video {
   display: flex;
   justify-content: center;
@@ -28,24 +21,6 @@ Here's the updated CSS. The key changes are:
   padding-top: 0 !important;
   width: 100%;
   height: 100%;
-}
-
-/* DM Player iframe wrapper — 16:9 responsive container */
-.dynamic-media-video .dm-video-player-wrapper {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-}
-
-.dynamic-media-video .dm-video-player-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
 }
 
 .dynamic-media-video[data-video-loaded='false'] {
@@ -125,16 +100,3 @@ Here's the updated CSS. The key changes are:
     max-height: 85vh;
   }
 }
-```
-
-**Summary of what changed and why:**
-
-| Change | Why |
-|---|---|
-| `position: relative; z-index: 1` on `.dynamic-media-video` | Establishes stacking context — prevents the sibling div from rendering on top |
-| `overflow: hidden` on `.dynamic-media-video` | Clips the absolutely-positioned video player to the container's fixed height boundaries |
-| `height: 100%; object-fit: contain` on `video` | Video fills the container while preserving aspect ratio — no stretching |
-| `padding-top: 0 !important` on `.vjs-fluid` | Overrides Video.js fluid padding so your media-query heights control sizing, not the player's own aspect-ratio logic |
-| `position: relative; z-index: 1` on `.dynamic-media-video-wrapper` | Ensures the entire wrapper participates in the correct stacking order |
-
-Your smart-crop breakpoints remain untouched — DM will still receive the correct container dimensions at each breakpoint to select the appropriate rendition.
