@@ -5,9 +5,45 @@
   z-index: 1;
   overflow: hidden;
 }
+
 .dynamic-media-video {
-    width:100%;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Override Video.js inline object-fit: contain */
+.dynamic-media-video .video-js {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.dynamic-media-video video {
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  display: block;
+}
+
+/* Video.js fluid override — let the container's fixed height govern sizing */
+.dynamic-media-video .video-js.vjs-fluid {
+  padding-top: 0 !important;
+  width: 100%;
+  height: 100%;
+}
+
+.dynamic-media-video[data-video-loaded='false'] {
+  aspect-ratio: 16 / 9;
+  background-color: #f0f0f0;
+}
+
+.dynamic-media-video[data-video-loaded='error'] {
+  aspect-ratio: 16 / 9;
+  background-color: #f8d7da;
 }
 
 /*
